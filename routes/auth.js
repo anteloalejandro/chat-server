@@ -1,7 +1,8 @@
-const router = require('express').Router()
-const User = require('../models/user.js')
-const bcrypt = require('bcrypt')
-const {encryptUserData, decryptUserData} = require('../encrypt.js')
+import { Router } from 'express'
+import { User } from '../models/user.js'
+import bcrypt from 'bcrypt'
+import {encryptUserData, decryptUserData} from '../encrypt.js'
+export const router = Router()
 
 router.get('/', (req, res) => {
   const encryptedUser = req.cookies.user
@@ -53,7 +54,7 @@ router.post('/sign-in', (req, res) => {
           res.redirect('sign-in')
           return
         }
-        encryptedUser = encryptUserData(user)
+        const encryptedUser = encryptUserData(user)
         res.cookie('user', encryptedUser)
         res.redirect('/')
         /* // Hashing won't do, gotta figure out how to encrypt to be able to reverse it
@@ -78,5 +79,3 @@ router.post('/delete-account', (req, res) => {
     .then(response => { res.send({error: false, msg: response}) })
     .catch(error => { res.send({error: true, msg: error}) })
 })
-
-module.exports = router

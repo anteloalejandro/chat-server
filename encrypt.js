@@ -1,5 +1,5 @@
-const crypto = require('crypto')
-const User = require('./models/user.js')
+import crypto from 'crypto'
+import { User } from './models/user.js'
 
 const algorithm = 'aes256'
 const secret = 'O4eZyDmkAy'
@@ -21,16 +21,14 @@ function decrypt (text) {
   return decrypted
 }
 
-function encryptUserData (user) {
+export function encryptUserData (user) {
   return encrypt(user.email + ':' + user.password)
 }
 
-function decryptUserData (encryptedUser) {
+export function decryptUserData (encryptedUser) {
   const [email, password] = decrypt(encryptedUser).split(':')
 
   const userPromise = User.findOne({email: email})
 
   return userPromise
 }
-
-module.exports = {encryptUserData, decryptUserData}

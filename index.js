@@ -1,13 +1,13 @@
-const express = require('express')
-const hbs = require('hbs')
-const https = require('https')
-const bodyParser = require('body-parser')
-const cookieParser = require('cookie-parser')
-const mongoose = require('mongoose')
-const fs = require('fs')
-const { Server } = require('socket.io')
+import express from 'express'
+import hbs from 'hbs'
+import https from 'https'
+import bodyParser from 'body-parser'
+import cookieParser from 'cookie-parser'
+import mongoose from 'mongoose'
+import fs from 'fs'
+import { Server } from 'socket.io'
+import { router as authRoute } from './routes/auth.js'
 const app = express()
-const authRoute = require('./routes/auth.js')
 
 const settings = JSON.parse(fs.readFileSync('./settings.json'))
 const defaults = {
