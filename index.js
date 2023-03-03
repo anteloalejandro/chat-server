@@ -1,6 +1,8 @@
 const express = require('express')
+const hbs = require('hbs')
 const https = require('https')
 const bodyParser = require('body-parser')
+const cookieParser = require('cookie-parser')
 const mongoose = require('mongoose')
 const fs = require('fs')
 const { Server } = require('socket.io')
@@ -22,7 +24,11 @@ Object.keys(defaults).forEach(k => {
 mongoose.Promise = global.Promise
 mongoose.connect('mongodb://127.0.0.1:27017/chat')
 
+app.set('view engine', 'hbs')
+
 app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({extended: true}))
+app.use(cookieParser())
 app.use('/', express.static(settings.root))
 app.use('/api', apiRoute)
 
