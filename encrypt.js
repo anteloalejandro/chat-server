@@ -22,13 +22,21 @@ function decrypt (text) {
 }
 
 export function encryptUserData (user) {
-  return encrypt(user.email + ':' + user.password)
+  try {
+    return encrypt(user.email + ':' + user.password)
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 export function decryptUserData (encryptedUser) {
-  const [email, password] = decrypt(encryptedUser).split(':')
+  let email, password
+  try {
+    [email, password] = decrypt(encryptedUser).split(':')
+  } catch (error) {
+    console.error(error);
+  }
 
   const userPromise = User.findOne({email: email})
-
   return userPromise
 }

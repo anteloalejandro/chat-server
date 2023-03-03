@@ -15,6 +15,10 @@ router.get('/', (req, res) => {
     .then(user => {
       res.render('index', {user: user})
     })
+    .catch(error => {
+      console.error(error)
+      res.render('index', {user: null})
+    })
 })
 
 router.get('/list-users', (req, res) => {
@@ -57,15 +61,11 @@ router.post('/sign-in', (req, res) => {
         const encryptedUser = encryptUserData(user)
         res.cookie('user', encryptedUser)
         res.redirect('/')
-        /* // Hashing won't do, gotta figure out how to encrypt to be able to reverse it
-        bcrypt.hash(`${user.username}:${user.password}`, 1, (err, hash) => {
-          if (err)
-            throw new Error('Internal Server Error while hashing user credentials')
-
-
-        }) */
       })
 
+    })
+    .catch(error => {
+      res.send({error: error})
     })
 })
 
