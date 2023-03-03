@@ -7,7 +7,7 @@ const mongoose = require('mongoose')
 const fs = require('fs')
 const { Server } = require('socket.io')
 const app = express()
-const apiRoute = require('./routes/api.js')
+const authRoute = require('./routes/auth.js')
 
 const settings = JSON.parse(fs.readFileSync('./settings.json'))
 const defaults = {
@@ -30,7 +30,7 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(cookieParser())
 app.use('/', express.static(settings.root))
-app.use('/api', apiRoute)
+app.use('/auth', authRoute)
 
 const key = fs.readFileSync(settings.key)
 const certificate = fs.readFileSync(settings.cert)
