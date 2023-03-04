@@ -20,7 +20,11 @@ const userSchema = new mongoose.Schema({
     required: true,
     trim: true,
     // pattern: '(?=.*\d.*)(?=.*[a-zA-Z].*)(?=.*[!#\$%&\?].*).{8,}'
-  }
+  },
+  conversations: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'conversations'
+  }]
 })
 
 export const User = mongoose.model('users', userSchema)
