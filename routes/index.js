@@ -2,17 +2,17 @@ import { Router } from 'express'
 import { User } from '../models/user.js'
 import { Message } from '../models/message.js'
 import { Conversation } from '../models/conversation.js'
-import bcrypt from 'bcrypt'
 import {encryptUserData, decryptUserData} from '../encrypt.js'
 export const router = Router()
 
 router.post('/', async (req, res) => {
+  const encryptedUser = req.cookies.user
   let isValid = true
-  let out = {}
+  let out
   try {
-
+    const user = await decryptUserData(encryptedUser)
+    req.body.message.author = user.id
     const message = new Message(req.body.message)
-    const user = await User.findById(message.author)
     const conversation = await Conversation.findById(message.conversation)
     console.log(message, user, conversation)
 
@@ -21,8 +21,11 @@ router.post('/', async (req, res) => {
     )
     isValid = conversationsIDs.includes(user.id)
 
-    if (isValid)
+    if (isValid) {
       message.save()
+      conversation.messages.push(message.id)
+      conversation.save()
+    }
 
     out = {
       error: false,
@@ -34,6 +37,33 @@ router.post('/', async (req, res) => {
     out = {
       error: error,
     }
+  }
+
+  res.send(out)
+})
+
+router.get('/get-messages/:conversation', async (req, res) => {
+  const encryptedUser = req.cookies.user
+  let out = {}
+
+  try {
+    const user = await decryptUserData(encryptedUser)
+    const conversation = await Conversation.findById(req.params.conversation)
+    const conversationsIDs = user.conversations.map(c => c.toString())
+    if (!conversationsIDs.includes(conversation.id))
+      throw new Error('Not a member in this conversation')
+
+    const popConversation = await conversation.populate({
+      path: 'messages',
+      populate: {
+        path: 'author'
+      }
+    })
+    const messages = popConversation.messages
+    out = {messages: messages}
+  } catch (error) {
+    console.log(error)
+    out = {error: error}
   }
 
   res.send(out)

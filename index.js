@@ -7,6 +7,7 @@ import fs from 'fs'
 import { Server } from 'socket.io'
 import { router as authRoute } from './routes/auth.js'
 import { router as indexRoute } from './routes/index.js'
+import { User } from './models/user.js'
 import { Message } from './models/message.js'
 import { Conversation } from './models/conversation.js'
 const app = express()
@@ -61,6 +62,17 @@ io.on('connection', (socket) => {
   socket.on('conversation', (con) => {
     console.log('conversation: ', con)
     const conversation = new Conversation(con)
+    // User.findById(conversation.users.user1)
+    //   .then(user => {
+    //     user.conversations.push(conversation.id)
+    //     user.save()
+    //   })
+    // User.findById(conversation.users.user2)
+    //   .then(user => {
+    //     user.conversations.push(conversation.id)
+    //     user.save()
+    //   })
+    //
     // conversation.save()
   })
 })
