@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 
 const conversationSchema = new mongoose.Schema({
-  _id: {
+  users: {
     user1: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'users',

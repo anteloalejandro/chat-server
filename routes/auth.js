@@ -22,7 +22,7 @@ router.get('/', (req, res) => {
 })
 
 router.get('/list-users', (req, res) => {
-  User.find().then(users => {res.send(users)})
+  User.find().populate("conversations").then(users => {res.send(users)})
 })
 
 router.post('/sign-up', (req, res) => {

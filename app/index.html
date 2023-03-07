@@ -13,7 +13,7 @@
 <script type="module">
   import { io } from "https://cdn.socket.io/4.3.2/socket.io.esm.min.js";
   const socket = io()
-  // socket.emit('conversation', {_id: {user1: '64012c17ee606bf7649fad84', user2: '64035105cb3782247f9b8662'}})
+  socket.emit('conversation', {users: {user1: '64012c17ee606bf7649fad84', user2: '64035105cb3782247f9b8662'}})
 
-  socket.emit('message', {content: 'Hello, World!', conversation: '640353cf6726c0427f3e0504', author: '64012c17ee606bf7649fad84'})
+  // socket.emit('message', {content: 'Hello, World!', conversation: '640353cf6726c0427f3e0504', author: '64012c17ee606bf7649fad84'})
 </script>

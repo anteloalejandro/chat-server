@@ -6,6 +6,7 @@ import mongoose from 'mongoose'
 import fs from 'fs'
 import { Server } from 'socket.io'
 import { router as authRoute } from './routes/auth.js'
+import { router as indexRoute } from './routes/index.js'
 import { Message } from './models/message.js'
 import { Conversation } from './models/conversation.js'
 const app = express()
@@ -30,6 +31,7 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(cookieParser())
 app.use('/', express.static(settings.root))
+app.use('/', indexRoute)
 app.use('/auth', authRoute)
 
 const key = fs.readFileSync(settings.key)
@@ -53,13 +55,13 @@ io.on('connection', (socket) => {
   socket.on('message', (msg) => {
     console.log('message: ', msg)
     const message = new Message(msg)
-    message.save()
+    // message.save()
     io.emit('message', msg)
   })
   socket.on('conversation', (con) => {
     console.log('conversation: ', con)
     const conversation = new Conversation(con)
-    conversation.save()
+    // conversation.save()
   })
 })
 
