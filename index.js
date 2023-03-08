@@ -53,27 +53,8 @@ io.on('connection', (socket) => {
     console.log('user disconnected')
   })
 
-  socket.on('message', (msg) => {
+  socket.on('message', msg => {
     console.log('message: ', msg)
-    const message = new Message(msg)
-    // message.save()
-    io.emit('message', msg)
-  })
-  socket.on('conversation', (con) => {
-    console.log('conversation: ', con)
-    const conversation = new Conversation(con)
-    // User.findById(conversation.users.user1)
-    //   .then(user => {
-    //     user.conversations.push(conversation.id)
-    //     user.save()
-    //   })
-    // User.findById(conversation.users.user2)
-    //   .then(user => {
-    //     user.conversations.push(conversation.id)
-    //     user.save()
-    //   })
-    //
-    // conversation.save()
   })
 })
 

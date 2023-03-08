@@ -11,6 +11,7 @@ router.post('/', async (req, res) => {
   let out
   try {
     const user = await decryptUserData(encryptedUser)
+    console.log(req.body)
     req.body.message.author = user.id
     const message = new Message(req.body.message)
     const conversation = await Conversation.findById(message.conversation)
@@ -64,6 +65,10 @@ router.post('/start-conversation/', async (req, res) => {
 
     conversation = new Conversation(users)
     conversation.save()
+    user1.conversations.push(conversation)
+    user2.conversations.push(conversation)
+    user1.save()
+    user2.save()
     out = {conversation: conversation}
   } catch (error) {
     console.log(error)
@@ -81,6 +86,7 @@ router.get('/get-messages/:conversation', async (req, res) => {
     const user = await decryptUserData(encryptedUser)
     const conversation = await Conversation.findById(req.params.conversation)
     const conversationsIDs = user.conversations.map(c => c.toString())
+    console.log(conversationsIDs, conversation.id)
     if (!conversationsIDs.includes(conversation.id))
       throw new Error('Not a member in this conversation')
 

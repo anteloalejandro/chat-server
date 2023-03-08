@@ -60,12 +60,12 @@ router.post('/sign-in', (req, res) => {
         }
         const encryptedUser = encryptUserData(user)
         res.cookie('user', encryptedUser)
-        res.redirect('/')
+        res.send({user: encryptedUser})
       })
 
     })
     .catch(error => {
-      res.send({error: error})
+      res.send({error: error.toString()})
     })
 })
 

@@ -1,0 +1,13 @@
+:root {
+  font-family: system-ui, sans-serif;
+  padding: 0; margin: 0;
+}
+
+h1 {
+  text-align: center;
+}
+
+form {
+  margin: auto;
+  width: fit-content;
+}
