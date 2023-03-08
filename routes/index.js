@@ -34,12 +34,43 @@ router.post('/', async (req, res) => {
     }
 
   } catch (error) {
-    out = {
-      error: error,
-    }
+    out = { error: error.toString() }
+  } finally {
+    res.send(out)
   }
 
-  res.send(out)
+})
+
+router.post('/start-conversation/', async (req, res) => {
+  const encryptedUser = req.cookies.user
+  let out = {}
+
+  try {
+    const user1 = await decryptUserData(encryptedUser)
+    const user2 = await User.findById(req.body.recipient)
+    const users = {
+      users: {
+        user1: user1.id,
+        user2: user2.id
+      }
+    }
+    let conversation = await Conversation.findOne({
+      "users.user1": user1.id,
+      "users.user2": user2.id
+    })
+    console.log(conversation, users)
+    if (conversation)
+      throw new Error('These users already have a conversation')
+
+    conversation = new Conversation(users)
+    conversation.save()
+    out = {conversation: conversation}
+  } catch (error) {
+    console.log(error)
+    out = {error: error.toString()}
+  } finally {
+    res.send(out)
+  }
 })
 
 router.get('/get-messages/:conversation', async (req, res) => {
@@ -63,8 +94,8 @@ router.get('/get-messages/:conversation', async (req, res) => {
     out = {messages: messages}
   } catch (error) {
     console.log(error)
-    out = {error: error}
+    out = {error: error.toString()}
+  } finally {
+    res.send(out)
   }
-
-  res.send(out)
 })
