@@ -8,16 +8,20 @@ function addMessage(str, element, owner = true) {
   element.appendChild(child)
 }
 
-export function run() {
+export async function run() {
   const socket = io()
   let conversation = '64090daecbd947e2e4895cf6'
+
+  const user = await fetch('/auth/user-data')
+    .then(response => response.json())
+  console.log(user)
 
   const messages = document.getElementById('messages')
   fetch('/get-messages/'+conversation)
     .then(response => response.json())
     .then(json => {
       console.log(json)
-      json.messages.forEach(m => addMessage(m.content, messages))
+      json.messages.forEach(m => addMessage(m.content, messages, m.author._id === user._id))
     })
   const form = document.querySelector('form')
   const input = form.querySelector('input')

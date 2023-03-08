@@ -1,6 +1,7 @@
 :root {
   font-family: system-ui, sans-serif;
   padding: 0; margin: 0;
+  --app-width: 300px
 }
 
 h1 {
@@ -9,5 +10,20 @@ h1 {
 
 form {
   margin: auto;
-  width: fit-content;
+  width: var(--app-width);
+  display: flex;
+  justify-content: center;
+}
+
+#messages {
+  margin: auto;
+  width: var(--app-width)
+}
+
+#messages .sent {
+  text-align: right;
+}
+
+#messages .recieved {
+  text-align: left;
 }

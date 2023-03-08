@@ -79,3 +79,17 @@ router.post('/delete-account', (req, res) => {
     .then(response => { res.send({error: false, msg: response}) })
     .catch(error => { res.send({error: true, msg: error}) })
 })
+
+router.get('/user-data', (req, res) => {
+  const encryptedUser = req.cookies.user
+  if (!encryptedUser) {
+    res.send({error: 'you must sign-in first'})
+    return
+  }
+
+  decryptUserData(encryptedUser)
+    .then(user => {
+      user.password = ''
+      res.send(user)
+    })
+})
