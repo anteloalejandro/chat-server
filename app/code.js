@@ -52,20 +52,4 @@ export async function run() {
         socket.emit('message', json.message)
       })
   }
-  /* fetch('/auth/sign-in', {
-    method: 'POST',
-    body: JSON.stringify({
-	    "username": "John",
-	    "email": "johndoe@example.com",
-	    "password": "john"
-    }),
-    headers: {
-      "Content-type": "application/json; charset=UTF-8"
-    }
-  })
-    .then(response => response.json())
-    .then(data => {console.log(data)}) */
-
-  //socket.emit('conversation', {users: {user1: '64012c17ee606bf7649fad84', user2: '64035105cb3782247f9b8662'}})
-  // socket.emit('message', {content: 'Hello, World!', conversation: '6407c5598568e0e6ae741ad4', author: '64012c17ee606bf7649fad84'})
 }

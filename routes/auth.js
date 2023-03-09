@@ -93,3 +93,14 @@ router.get('/user-data', (req, res) => {
       res.send(user)
     })
 })
+
+router.get('/user-data/:id', (req, res) => {
+  User.findById(req.params.id)
+    .then(user => {
+      user.password = ''
+      res.send(user)
+    })
+    .catch(error => {
+      res.send({error: error})
+    })
+})

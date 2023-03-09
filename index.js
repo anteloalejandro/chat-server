@@ -2,6 +2,7 @@ import express from 'express'
 import https from 'https'
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
+import cors from 'cors'
 import mongoose from 'mongoose'
 import fs from 'fs'
 import { Server } from 'socket.io'
@@ -23,6 +24,12 @@ Object.keys(defaults).forEach(k => {
   if (settings[k] === undefined)
     settings[k] = defaults[k]
 })
+const corsConfig = {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"]
+  }
+}
 mongoose.Promise = global.Promise
 mongoose.connect('mongodb://127.0.0.1:27017/chat')
 
@@ -31,6 +38,7 @@ app.set('view engine', 'hbs')
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(cookieParser())
+app.use(cors(corsConfig))
 app.use('/', express.static(settings.root))
 app.use('/', indexRoute)
 app.use('/auth', authRoute)
@@ -40,12 +48,7 @@ const certificate = fs.readFileSync(settings.cert)
 const credentials = {key: key, cert: certificate}
 const server = https.createServer(credentials, app)
 
-const io = new Server(server, {
-  cors: {
-    origin: "*",
-    methods: ["GET", "POST"]
-  }
-})
+const io = new Server(server, corsConfig)
 
 io.on('connection', (socket) => {
   console.log('user connected')
