@@ -92,9 +92,9 @@ router.get('/get-messages/:conversation', async (req, res) => {
 
     const popConversation = await conversation.populate({
       path: 'messages',
-      populate: {
+      /* populate: {
         path: 'author'
-      }
+      } */
     })
     const messages = popConversation.messages
     out = {messages: messages}

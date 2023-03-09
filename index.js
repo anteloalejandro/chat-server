@@ -53,8 +53,20 @@ io.on('connection', (socket) => {
     console.log('user disconnected')
   })
 
-  socket.on('message', msg => {
+  socket.on('join', room => {
+    console.log('joining room '+room)
+    socket.join(room)
+  })
+
+  socket.on('message', async msg => {
     console.log('message: ', msg)
+    const conversation = await Conversation.findById(msg.conversation)
+    Object.keys(conversation.users).forEach(u => {
+      const room = conversation.users[u]._id.toString()
+      console.log('sending message to room '+room)
+      io.in(room).emit('refresh-messages', msg)
+    })
+
   })
 })
 
