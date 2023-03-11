@@ -20,7 +20,7 @@ const defaults = {
   key: './https.key',
   cert: './https.crt',
   port: 3000,
-  root: './app'
+  root: './demo'
 }
 Object.keys(defaults).forEach(k => {
   if (settings[k] === undefined)
