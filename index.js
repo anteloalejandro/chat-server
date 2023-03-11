@@ -72,13 +72,18 @@ io.on('connection', (socket) => {
 
   socket.on('message', async msg => {
     console.log('message: ', msg)
-    const conversation = await Conversation.findById(msg.conversation)
-    Object.keys(conversation.users).forEach(u => {
-      const room = conversation.users[u]._id.toString()
-      console.log('sending message to room '+room)
-      io.in(room).emit('refresh-messages', msg)
-    })
-
+    try {
+      const conversation = await Conversation.findById(msg.conversation)
+      if (!conversation)
+        throw new Error('Could not find this conversation')
+      Object.keys(conversation.users).forEach(u => {
+        const room = conversation.users[u]._id.toString()
+        console.log('sending message to room '+room)
+        io.in(room).emit('refresh-messages', msg)
+      })
+    } catch (error) {
+      console.error(error)
+    }
   })
 })
 

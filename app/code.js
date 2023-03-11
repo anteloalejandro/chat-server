@@ -25,22 +25,21 @@ export async function run() {
     addMessage(msg.content, messages, msg.author === user._id)
   })
 
-  fetch('/api/get-messages/'+conversation)
+  fetch('/api/messages/conversation/'+conversation)
     .then(response => response.json())
-    .then(json => {
-      console.log(json)
-      json.messages.forEach(m => addMessage(m.content, messages, m.author === user._id))
+    .then(message => {
+      console.log(message)
+      message.forEach(m =>
+        addMessage(m.content, messages, m.author === user._id))
     })
 
   form.onsubmit = ev => {
     ev.preventDefault()
-    fetch('/api/', {
+    fetch('/api/messages', {
       method: 'POST',
       body: JSON.stringify({
-        "message": {
-          "content": input.value,
-          "conversation": conversation
-        }
+        "content": input.value,
+        "conversation": conversation
       }),
       headers: headers
     })
@@ -48,8 +47,8 @@ export async function run() {
         input.value = ''
         return response.json()
       })
-      .then(json => {
-        socket.emit('message', json.message)
+      .then(message => {
+        socket.emit('message', message)
       })
   }
 }
