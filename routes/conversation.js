@@ -66,8 +66,7 @@ router.post('/', async (req, res) => {
 
       recipient.conversations.push(conversation._id)
       recipient.save()
-    })
-    res.send(conversation)
+    }).then(() => {res.send(conversation)})
   } catch (error) {
     console.error(error)
     res.send({error: error.message})

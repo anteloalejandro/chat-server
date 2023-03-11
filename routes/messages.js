@@ -53,9 +53,10 @@ router.post('/', async (req, res) => {
     const conversation = await Conversation.findById(req.body.conversation)
     if (!conversation)
       throw new Error('Could not find this conversation')
-    if (user.conversations.includes(conversation._id))
+    if (!user.conversations.includes(conversation._id))
       throw new Error('This user is not a member of this conversation')
 
+    console.log('OK')
     const message = new Message({
       content: req.body.content,
       conversation: conversation._id,
@@ -64,7 +65,7 @@ router.post('/', async (req, res) => {
     message.save().then(() => {
       conversation.messages.push(message._id)
       conversation.save()
-    })
+    }).then(() => {res.send(message)})
   } catch (error) {
     console.error(error)
     res.send({error: error.message})
