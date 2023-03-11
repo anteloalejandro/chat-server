@@ -11,7 +11,7 @@ function addMessage(str, element, owner = true) {
 export async function run() {
   let conversation = '64090daecbd947e2e4895cf6'
   const socket = io()
-  const user = await fetch('/auth/user-data')
+  const user = await fetch('/api/user-data')
     .then(response => response.json())
   console.log(user)
   socket.emit('join', user._id)
@@ -25,7 +25,7 @@ export async function run() {
     addMessage(msg.content, messages, msg.author === user._id)
   })
 
-  fetch('/get-messages/'+conversation)
+  fetch('/api/get-messages/'+conversation)
     .then(response => response.json())
     .then(json => {
       console.log(json)
@@ -34,7 +34,7 @@ export async function run() {
 
   form.onsubmit = ev => {
     ev.preventDefault()
-    fetch('/', {
+    fetch('/api/', {
       method: 'POST',
       body: JSON.stringify({
         "message": {

@@ -5,13 +5,12 @@ import {encryptUserData, decryptUserData} from '../encrypt.js'
 export const router = Router()
 
 router.get('/', (req, res) => {
-  const encryptedUser = req.cookies.user
-  if (encryptedUser === undefined) {
+  if (req.token === undefined) {
     res.render('index', {user: null})
     return
   }
 
-  decryptUserData(encryptedUser)
+  decryptUserData(req.token)
     .then(user => {
       res.render('index', {user: user})
     })
@@ -19,10 +18,6 @@ router.get('/', (req, res) => {
       console.error(error)
       res.render('index', {user: null})
     })
-})
-
-router.get('/list-users', (req, res) => {
-  User.find().populate("conversations").then(users => {res.send(users)})
 })
 
 router.post('/sign-up', (req, res) => {
@@ -58,9 +53,9 @@ router.post('/sign-in', (req, res) => {
           res.redirect('sign-in')
           return
         }
-        const encryptedUser = encryptUserData(user)
-        res.cookie('user', encryptedUser)
-        res.send({user: encryptedUser})
+        req.token = encryptUserData(user)
+        res.cookie('user', req.token)
+        res.send({user: req.token})
       })
 
     })
@@ -72,35 +67,4 @@ router.post('/sign-in', (req, res) => {
 router.get('/sign-off', (req, res) => {
   res.clearCookie('user')
   res.redirect('/')
-})
-
-router.post('/delete-account', (req, res) => {
-  User.findByIdAndRemove(req.body.id)
-    .then(response => { res.send({error: false, msg: response}) })
-    .catch(error => { res.send({error: true, msg: error}) })
-})
-
-router.get('/user-data', (req, res) => {
-  const encryptedUser = req.cookies.user
-  if (!encryptedUser) {
-    res.send({error: 'you must sign-in first'})
-    return
-  }
-
-  decryptUserData(encryptedUser)
-    .then(user => {
-      user.password = ''
-      res.send(user)
-    })
-})
-
-router.get('/user-data/:id', (req, res) => {
-  User.findById(req.params.id)
-    .then(user => {
-      user.password = ''
-      res.send(user)
-    })
-    .catch(error => {
-      res.send({error: error})
-    })
 })

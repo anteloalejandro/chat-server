@@ -7,7 +7,9 @@ import mongoose from 'mongoose'
 import fs from 'fs'
 import { Server } from 'socket.io'
 import { router as authRoute } from './routes/auth.js'
-import { router as indexRoute } from './routes/index.js'
+import { router as apiRoute } from './routes/api.js'
+import { router as conversationsRoute } from './routes/conversation.js'
+import { router as messagesRoute } from './routes/messages.js'
 import { User } from './models/user.js'
 import { Message } from './models/message.js'
 import { Conversation } from './models/conversation.js'
@@ -27,21 +29,27 @@ Object.keys(defaults).forEach(k => {
 const corsConfig = {
   cors: {
     origin: "*",
-    methods: ["GET", "POST"]
+    methods: ["GET", "POST", "PUT", "DELETE"]
   }
 }
 mongoose.Promise = global.Promise
 mongoose.connect('mongodb://127.0.0.1:27017/chat')
 
 app.set('view engine', 'hbs')
-
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(cookieParser())
+app.use((req, res, next) => {
+  req.token = req.cookies.user
+
+  next()
+})
 app.use(cors(corsConfig))
 app.use('/', express.static(settings.root))
-app.use('/', indexRoute)
 app.use('/auth', authRoute)
+app.use('/api', apiRoute)
+app.use('/api/conversations', conversationsRoute)
+app.use('/api/messages', messagesRoute)
 
 const key = fs.readFileSync(settings.key)
 const certificate = fs.readFileSync(settings.cert)
@@ -57,6 +65,7 @@ io.on('connection', (socket) => {
   })
 
   socket.on('join', room => {
+    if (!room) return
     console.log('joining room '+room)
     socket.join(room)
   })

@@ -6,11 +6,10 @@ import {encryptUserData, decryptUserData} from '../encrypt.js'
 export const router = Router()
 
 router.post('/', async (req, res) => {
-  const encryptedUser = req.cookies.user
   let isValid = true
   let out
   try {
-    const user = await decryptUserData(encryptedUser)
+    const user = await decryptUserData(req.token)
     console.log(req.body)
     req.body.message.author = user.id
     const message = new Message(req.body.message)
@@ -43,11 +42,10 @@ router.post('/', async (req, res) => {
 })
 
 router.post('/start-conversation/', async (req, res) => {
-  const encryptedUser = req.cookies.user
   let out = {}
 
   try {
-    const user1 = await decryptUserData(encryptedUser)
+    const user1 = await decryptUserData(req.token)
     const user2 = await User.findById(req.body.recipient)
     const users = {
       users: {
@@ -79,11 +77,10 @@ router.post('/start-conversation/', async (req, res) => {
 })
 
 router.get('/get-messages/:conversation', async (req, res) => {
-  const encryptedUser = req.cookies.user
   let out = {}
 
   try {
-    const user = await decryptUserData(encryptedUser)
+    const user = await decryptUserData(req.token)
     const conversation = await Conversation.findById(req.params.conversation)
     const conversationsIDs = user.conversations.map(c => c.toString())
     console.log(conversationsIDs, conversation.id)
@@ -104,4 +101,35 @@ router.get('/get-messages/:conversation', async (req, res) => {
   } finally {
     res.send(out)
   }
+})
+
+
+router.delete('/delete-account', (req, res) => {
+  User.findByIdAndRemove(req.body.id)
+    .then(response => { res.send({error: false, msg: response}) })
+    .catch(error => { res.send({error: true, msg: error}) })
+})
+
+router.get('/user-data', (req, res) => {
+  if (!req.token) {
+    res.send({error: 'you must sign-in first'})
+    return
+  }
+
+  decryptUserData(req.token)
+    .then(user => {
+      user.password = ''
+      res.send(user)
+    })
+})
+
+router.get('/user-data/:id', (req, res) => {
+  User.findById(req.params.id)
+    .then(user => {
+      user.password = null
+      res.send(user)
+    })
+    .catch(error => {
+      res.send({error: error})
+    })
 })
