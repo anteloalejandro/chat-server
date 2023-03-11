@@ -5,10 +5,22 @@ import { Conversation } from '../models/conversation.js'
 import {encryptUserData, decryptUserData} from '../encrypt.js'
 export const router = Router()
 
-router.delete('/delete-account', (req, res) => {
-  User.findByIdAndRemove(req.body.id)
-    .then(response => { res.send({error: false, msg: response}) })
-    .catch(error => { res.send({error: true, msg: error}) })
+router.delete('/delete-account', async (req, res) => {
+  try {
+    if (!req.token)
+      throw new Error('You must sign-in first')
+
+    const user = await decryptUserData(req.token)
+    if (!user)
+      throw new Error('Could not authenticate user')
+
+    user.deleteOne().then(u => {
+      res.send(u)
+    })
+  } catch (error) {
+    console.error(error)
+    res.send({error: error.message})
+  }
 })
 
 router.get('/user-data', async (req, res) => {
