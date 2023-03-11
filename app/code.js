@@ -6,29 +6,47 @@ function addMessage(str, element, owner = true) {
   child.textContent = str
   child.classList.add(owner ? 'sent' : 'recieved')
   element.appendChild(child)
+  return child
 }
 
 export async function run() {
   let conversation = '64090daecbd947e2e4895cf6'
   const socket = io()
-  const user = await fetch('/api/user-data')
-    .then(response => response.json())
-  console.log(user)
-  socket.emit('join', user._id)
-
   const messages = document.getElementById('messages')
   const form = document.querySelector('form')
   const input = form.querySelector('input')
+  const info = document.getElementById('info')
+
+  const user = await fetch('/api/user-data')
+    .then(response => response.json())
+  if (user.error) {
+    info.textContent = 'Not logged in'
+    return
+  } else {
+    fetch('/api/conversations/'+conversation)
+      .then(response => response.json())
+      .then(conversation => {
+        const user1 = conversation.users.user1
+        const user2 = conversation.users.user2
+        const recieverId = user1 == user._id ? user2 : user1
+        fetch('/api/user-data/'+recieverId)
+          .then(response => response.json())
+          .then(reciever => {
+            info.textContent = `Sender: ${user.username}, Reciever: ${reciever.username}`
+          })
+      })
+  }
+  socket.emit('join', user._id)
 
   socket.on('refresh-messages', msg => {
-    console.log('Refresh messages')
+    console.log('Refreshing messages...')
     addMessage(msg.content, messages, msg.author === user._id)
+      .scrollIntoView({behavior: "smooth"})
   })
 
   fetch('/api/messages/conversation/'+conversation)
     .then(response => response.json())
     .then(message => {
-      console.log(message)
       message.forEach(m =>
         addMessage(m.content, messages, m.author === user._id))
     })

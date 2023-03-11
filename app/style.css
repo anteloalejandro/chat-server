@@ -1,29 +1,76 @@
+* {box-sizing: border-box;}
 :root {
   font-family: system-ui, sans-serif;
+  --app-width: 500px;
+  background-color: #ddd;
+}
+
+:root, body {
   padding: 0; margin: 0;
-  --app-width: 300px
 }
 
 h1 {
   text-align: center;
 }
 
-form {
+nav {
+  padding-block: 0.5rem;
+}
+nav > * {
+  margin-inline: 0.5ch;
+}
+
+.container {
   margin: auto;
   width: var(--app-width);
+  max-width: 100%;
+  display: grid;
+  grid-template-columns: 1fr;
+  background-color: white;
+}
+
+#send {
+  width: fit-content;
+  margin: 1rem auto;
   display: flex;
   justify-content: center;
+  font-size: 110%;
+  overflow: hidden;
+  border-radius: 0.5rem;
+}
+
+#send :is(input, button) {
+  border: none;
+  border-radius: 0;
+  background-color: #eee;
+  display: inline-block;
+  outline: none;
+  padding: 0.5rem;
+}
+
+#send button:is(:hover, :focus) {
+  background-color: lightgreen;
 }
 
 #messages {
-  margin: auto;
-  width: var(--app-width)
+  overflow: scroll;
+  display: flex;
+  flex-flow: column;
+  padding: 0.2rem;
+  border-block: 2px solid grey;
 }
 
+#messages :is(.sent, .recieved) {
+  padding: 0.5rem;
+  border-radius: 0.2rem;
+  margin-block: 0.2rem;
+}
 #messages .sent {
-  text-align: right;
+  align-self: flex-end;
+  background-color: lightblue;
 }
 
 #messages .recieved {
-  text-align: left;
+  align-self: flex-start;
+  background-color: lightcoral;
 }

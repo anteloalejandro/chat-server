@@ -5,10 +5,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="style.css" rel="stylesheet">
+    <style>
+      .container {
+        grid-template-rows: auto auto 1fr;
+        height: 100vh;
+        overflow: hidden;
+      }
+    </style>
   </head>
   <body>
-    <h1>THIS IS THE DEFAULT APP</h1>
     <div class="container">
+      <h1>DEMO APP</h1>
+      <nav>
+        <span id="info"></span>
+        <a href="#" style="float: right"
+          onclick="document.cookie = 'user=;'; location.reload()">
+          Sign out
+        </a>
+        <a href="sign-in.html" style="float: right">Sign in</a>
+      </nav>
       <div id="messages"></div>
       <form id="send">
         <input type="text">

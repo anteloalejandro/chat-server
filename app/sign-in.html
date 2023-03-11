@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="style.css" rel="stylesheet">
+    <style>
+      :root {
+        --app-width: 300px;
+      }
+      body {
+        min-height: 100vh;
+        display: grid;
+        align-items: center;
+      }
+      .container {
+        padding: 0.5rem;
+        border-radius: 0.5rem;
+      }
+      form > * {
+        display: block;
+        width: 100%;
+        border: 1px solid grey;
+        border-radius: 0.2em;
+        padding: 0.5rem;
+        margin-bottom: 0.5rem;
+        font-size: 120%;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Sign in form</h1>
+      <form action="/auth/sign-in" method="post" onsubmit="location.href = '/'">
+        <input type="text" placeholder="username" name="username" required>
+        <input type="email" placeholder="email" name="email" required>
+        <input type="password" placeholder="password" name="password" required>
+        <input type="submit" value="Sign in">
+      </form>
+      <small>
+        <p><em>This demo uses a preconfigured conversation, so you need to sign in as either of these users:</em></p>
+        <div>
+          <strong>John</strong>
+          <ul>
+            <li>Name: John</li>
+            <li>Email: johndoe@example.com</li>
+            <li>Password: john</li>
+          </ul>
+        </div>
+        <div>
+          <strong>Foo Bar</strong>
+          <ul>
+            <li>Name: Foo Bar</li>
+            <li>Email: foobar@example.com</li>
+            <li>Password: foobar</li>
+          </ul>
+        </div>
+      </small>
+    </div>
+  </body>
+</html>
+<script>
+  const form = document.querySelector('form')
+  form.addEventListener('submit', ev => {
+    ev.preventDefault()
+    fetch(form.action, {
+      method: 'POST',
+      body: JSON.stringify({
+        username: document.querySelector('[name="username"]').value,
+        email: document.querySelector('[name="email"]').value,
+        password: document.querySelector('[name="password"]').value
+      }),
+      headers: headers = { "Content-type": "application/json; charset=UTF-8" }
+    })
+      .then(() => {location.href = '/'})
+  })
+</script>
