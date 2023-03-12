@@ -1,0 +1,27 @@
+{{#> template}}
+<h1>Messages</h1>
+
+<h2>Mongoose schema</h2>
+<pre><code class="language-javascript">
+{
+  content: {
+    type: String,
+    required: true
+  },
+  date: {
+    type: Date,
+    default: new Date(Date.now()),
+  },
+  author: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'users',
+    required: true
+  },
+  conversation: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'conversations',
+    required: true
+  }
+}
+</code></pre>
+{{/ template}}

@@ -1,0 +1,25 @@
+{{#> template}}
+<h1>Conversations</h1>
+
+<h2>Mongoose schema</h2>
+<pre><code class="language-javascript">
+{
+  users: {
+    user1: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'users',
+      required: true,
+    },
+    user2: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'users',
+      required: true
+    }
+  },
+  messages: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'messages'
+  }]
+}
+</code></pre>
+{{/ template}}

@@ -4,16 +4,46 @@
     <title></title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="/public/css/docs.css" rel="stylesheet">
+    <!-- CSS Framework -->
     <link href="/public/css/bootstrap.min.css" rel="stylesheet">
     <script src="/public/js/bootstrap.min.js"></script>
+    <!-- Syntax highlighting -->
+    <link href="/public/css/highlights/stackoverflow-dark.min.css" rel="stylesheet">
+    <script src="/public/js/highlight.min.js"></script>
+    <script>
+      hljs.highlightAll()
+    </script>
+    <!-- Custom stylesheet -->
+    <link href="/public/css/docs.css" rel="stylesheet">
   </head>
-  <body>
-    <header>Documentation</header>
-    <nav></nav>
-    <div class="container">
+  <body class="bg-body text-body" data-bs-theme="dark">
+    <header class="bg-dark-subtle">
+      <nav class="navbar navbar-expand-sm ">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="/"><h3 class="mb-0">Docs</h3></a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+              <li class="nav-item">
+                <a class="nav-link" href="/api/docs/users">Users</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/api/docs/messages">Messages</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/api/docs/conversations">Conversations</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <main class="container-fluid">
       {{> @partial-block }}
     </div>
-    <footer></footer>
+    <footer class="bg-dark-subtle">
+    </footer>
   </body>
 </html>
