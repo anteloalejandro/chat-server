@@ -1,0 +1,56 @@
+import { Router } from 'express'
+import { User } from '../models/user.js'
+import { Message } from '../models/message.js'
+import { Conversation } from '../models/conversation.js'
+import {encryptUserData, decryptUserData} from '../encrypt.js'
+export const router = Router()
+
+router.get('/', async (req, res) => {
+  try {
+    if (!req.token)
+      throw new Error('You must sign-in first')
+
+    const user = await decryptUserData(req.token)
+    if (!user)
+      throw new Error('Could not authenticate user')
+
+    user.password = null
+
+    res.send(user)
+  } catch (error) {
+    console.error(error)
+    res.send({error: error.message})
+  }
+})
+
+router.get('/:id', async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id)
+    if (!user)
+      throw new Error('Could not find user')
+    user.password = null
+    res.send(user)
+  } catch (error) {
+    console.error(error)
+    res.send({error: error.message})
+  }
+})
+
+router.delete('/', async (req, res) => {
+  try {
+    if (!req.token)
+      throw new Error('You must sign-in first')
+
+    const user = await decryptUserData(req.token)
+    if (!user)
+      throw new Error('Could not authenticate user')
+
+    user.deleteOne().then(u => {
+      res.send(u)
+    })
+  } catch (error) {
+    console.error(error)
+    res.send({error: error.message})
+  }
+})
+

@@ -1,62 +1,12 @@
 import { Router } from 'express'
-import { User } from '../models/user.js'
-import { Message } from '../models/message.js'
-import { Conversation } from '../models/conversation.js'
 import { router as docsRouter } from './docs.js'
 import { router as messagesRouter } from './messages.js'
-import { router as conversationRouter } from './conversation.js'
-import {encryptUserData, decryptUserData} from '../encrypt.js'
+import { router as conversationsRouter } from './conversations.js'
+import { router as usersRouter } from './users.js'
 export const router = Router()
 
 router.use('/docs', docsRouter)
 router.use('/messages', messagesRouter)
-router.use('/conversations', conversationRouter)
+router.use('/conversations', conversationsRouter)
+router.use('/users', usersRouter)
 
-router.delete('/delete-account', async (req, res) => {
-  try {
-    if (!req.token)
-      throw new Error('You must sign-in first')
-
-    const user = await decryptUserData(req.token)
-    if (!user)
-      throw new Error('Could not authenticate user')
-
-    user.deleteOne().then(u => {
-      res.send(u)
-    })
-  } catch (error) {
-    console.error(error)
-    res.send({error: error.message})
-  }
-})
-
-router.get('/user-data', async (req, res) => {
-  try {
-    if (!req.token)
-      throw new Error('You must sign-in first')
-
-    const user = await decryptUserData(req.token)
-    if (!user)
-      throw new Error('Could not authenticate user')
-
-    user.password = null
-
-    res.send(user)
-  } catch (error) {
-    console.error(error)
-    res.send({error: error.message})
-  }
-})
-
-router.get('/user-data/:id', async (req, res) => {
-  try {
-    const user = await User.findById(req.params.id)
-    if (!user)
-      throw new Error('Could not find user')
-    user.password = null
-    res.send(user)
-  } catch (error) {
-    console.error(error)
-    res.send({error: error.message})
-  }
-})

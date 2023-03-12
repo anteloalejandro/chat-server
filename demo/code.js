@@ -17,7 +17,7 @@ export async function run() {
   const input = form.querySelector('input')
   const info = document.getElementById('info')
 
-  const user = await fetch('/api/user-data')
+  const user = await fetch('/api/users/')
     .then(response => response.json())
   if (user.error) {
     info.textContent = 'Not logged in'
@@ -29,7 +29,7 @@ export async function run() {
         const user1 = conversation.users.user1
         const user2 = conversation.users.user2
         const recieverId = user1 == user._id ? user2 : user1
-        fetch('/api/user-data/'+recieverId)
+        fetch('/api/users/'+recieverId)
           .then(response => response.json())
           .then(reciever => {
             info.textContent = `Sender: ${user.username}, Reciever: ${reciever.username}`
