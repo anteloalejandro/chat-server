@@ -1,0 +1,12 @@
+<section class="text-center w-100 dropdown-toggle"
+         style="cursor: pointer;" id="{{id}}"
+  data-bs-toggle="collapse" data-bs-target="#{{id}}-collapse" aria-expanded="false">
+  <h2>{{ heading }}</h2>
+</section>
+<div class="collapse" id="{{id}}-collapse">
+  <div class="card card-body">
+    {{> @partial-block }}
+  </div>
+</div>
+<hr>
+

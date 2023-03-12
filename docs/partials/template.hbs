@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title></title>
+    <title>API Documentation</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- CSS Framework -->
@@ -26,15 +26,11 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
+              {{#each pages}}
               <li class="nav-item">
-                <a class="nav-link" href="/api/docs/users">Users</a>
+                <a class="nav-link" href="/api/docs#{{this}}">{{this}}</a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/api/docs/messages">Messages</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/api/docs/conversations">Conversations</a>
-              </li>
+              {{/each}}
             </ul>
           </div>
         </div>

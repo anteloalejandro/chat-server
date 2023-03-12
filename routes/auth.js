@@ -17,8 +17,10 @@ router.post('/sign-up', (req, res) => {
     })
 
     user.save()
-      .then(response => { res.send({error: false, msg: response}) })
-      .catch(error => { res.send({error: true, msg: error}) })
+      .then(() => {
+        res.send({msg: 'User created successfully', id: user._id})
+      })
+      .catch(error => { res.send({error: error.message}) })
 
   })
 })
@@ -40,7 +42,7 @@ router.post('/sign-in', (req, res) => {
 
     })
     .catch(error => {
-      res.send({error: error.toString()})
+      res.send({error: error.message})
     })
 })
 

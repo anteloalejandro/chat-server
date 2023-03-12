@@ -16,7 +16,10 @@ import { Conversation } from './models/conversation.js'
 const app = express()
 
 hbs.registerPartials('./docs/partials');
-
+hbs.registerHelper('concat', function () {
+  const args = [...arguments].slice(0,-1)
+  return args.join('')
+})
 
 const settings = fs.existsSync('./settings.json') ?
   JSON.parse(fs.readFileSync('./settings.json')) : {}

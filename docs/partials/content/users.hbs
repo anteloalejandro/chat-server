@@ -1,0 +1,23 @@
+<h3>Response</h3>
+<p><em>Every request in this section returns this: </em></p>
+<pre><code class="language-json">
+{
+	"_id": "64012c17ee606bf7649fad84",
+	"email": "johndoe@example.com",
+	"username": "John",
+	"password": null,
+	"__v": 2,
+	"conversations": [
+		"6407c5598568e0e6ae741ad4",
+		"64090daecbd947e2e4895cf6"
+	]
+}
+</code></pre>
+<h3><strong>GET</strong> <code>/api/users/</code></h3>
+<p>Returns the current authenticated user, without its password</p>
+
+<h3><strong>GET</strong> <code>/api/users/{id}</code></h3>
+<p>Returns a user with a matching <code>id</code>, without its password</p>
+
+<h3><strong>DELETE</strong> <code>/api/users/</code></h3>
+<p>Deletes the authenticated user</p>

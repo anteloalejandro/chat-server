@@ -1,6 +1,14 @@
 {{#> template}}
-<h1>Documentation</h1>
+<h1>Overview</h1>
 
-<p>Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.</p>
+<p>This public REST API allows developers to create their own frontend messaging app.</p>
+<p>Responses from this API will be in JSON format.</p>
+
+<p>At the moment, there are essentially 3 types of successful responses: Users, Conversations and Messages.</p>
+{{#each pages as |page|}}
+{{#> section id=page heading=page }}
+  {{> (concat 'content/' page) }}
+{{/ section}}
+{{/each}}
 
 {{/ template}}
