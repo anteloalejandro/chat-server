@@ -2,8 +2,15 @@ import { Router } from 'express'
 import { User } from '../models/user.js'
 import { Message } from '../models/message.js'
 import { Conversation } from '../models/conversation.js'
+import { router as docsRouter } from './docs.js'
+import { router as messagesRouter } from './messages.js'
+import { router as conversationRouter } from './conversation.js'
 import {encryptUserData, decryptUserData} from '../encrypt.js'
 export const router = Router()
+
+router.use('/docs', docsRouter)
+router.use('/messages', messagesRouter)
+router.use('/conversations', conversationRouter)
 
 router.delete('/delete-account', async (req, res) => {
   try {
