@@ -1,4 +1,5 @@
-import express from 'express'
+import express, { Router } from 'express'
+import http from 'http'
 import https from 'https'
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
@@ -21,6 +22,7 @@ const defaults = {
   key: './https.key',
   cert: './https.crt',
   port: 3000,
+  httpPort: 8080,
   root: './demo'
 }
 Object.keys(defaults).forEach(k => {
@@ -90,3 +92,8 @@ io.on('connection', (socket) => {
 server.listen(settings.port, () => {
   console.log('Listening on *:'+settings.port)
 })
+http.createServer(
+  express().use((req, res) => {
+    res.redirect(300, `https://${req.hostname}:${settings.port}${req.url}`)
+  })
+).listen(settings.httpPort)
