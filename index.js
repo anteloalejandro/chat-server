@@ -21,8 +21,8 @@ hbs.registerPartials('./docs/partials');
 const settings = fs.existsSync('./settings.json') ?
   JSON.parse(fs.readFileSync('./settings.json')) : {}
 const defaults = {
-  key: './https.key',
-  cert: './https.crt',
+  key: './snake-oil.key',
+  cert: './snake-oil.crt',
   port: 3000,
   httpPort: 8080,
   root: './demo'

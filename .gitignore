@@ -1,3 +1,7 @@
 node_modules/
 app/
 settings.json
+*.key
+*.cert
+!snake-oil.crt
+!snake-oil.key
