@@ -6,44 +6,52 @@ export const router = Router()
 
 router.post('/sign-up', (req, res) => {
   const saltRounds = 10;
-  bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
-    if (err)
-      throw new Error('Internal Server Error while hashing password')
+  try {
+    bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
+      if (err)
+        throw new Error('Internal Server Error while hashing password')
 
-    const user = new User({
-      username: req.body.username,
-      email: req.body.email,
-      password: hash,
-    })
-
-    user.save()
-      .then(() => {
-        res.send({msg: 'User created successfully', id: user._id})
+      const user = new User({
+        username: req.body.username,
+        email: req.body.email,
+        password: hash,
       })
-      .catch(error => { res.send({error: error.message}) })
 
-  })
+      user.save().then(() => {
+        res.send({
+          msg: 'User created successfully',
+          id: user._id
+        })
+      })
+    })
+  } catch (error) {
+    console.error(error)
+    res.send({error: error.message})
+  }
 })
 
 router.post('/sign-in', (req, res) => {
-  User.findOne({email: req.body.email})
-    .then(user => {
-      console.log(user)
-      bcrypt.compare(req.body.password, user.password, (err, match) => {
-        if (!match) {
-          res.clearCookie('user')
-          res.redirect('sign-in')
-          return
-        }
-        req.token = encryptUserData(user)
-        res.cookie('user', req.token)
-        res.send({user: req.token})
+  try {
+    User.findOne({email: req.body.email})
+      .then(user => {
+        bcrypt.compare(req.body.password, user.password, (err, match) => {
+          // This is an async callback fn, so if I throw an error here it won't be caught by the try-catch
+          if (!match) {
+            const error = new Error('Wrong credentials')
+            res.clearCookie('user')
+            console.error(error)
+            res.send({error: error.message})
+            return
+          }
+          req.token = encryptUserData(user)
+          res.cookie('user', req.token)
+          res.send({user: req.token})
+        })
       })
-
-    })
-    .catch(error => {
-      res.send({error: error.message})
-    })
+  } catch (error) {
+    console.error(error)
+    res.send({error: error.message})
+  }
 })
 
 router.get('/sign-out', (req, res) => {
