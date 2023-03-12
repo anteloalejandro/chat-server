@@ -17,7 +17,9 @@ const app = express()
 
 hbs.registerPartials('./docs/partials');
 
-const settings = JSON.parse(fs.readFileSync('./settings.json'))
+
+const settings = fs.existsSync('./settings.json') ?
+  JSON.parse(fs.readFileSync('./settings.json')) : {}
 const defaults = {
   key: './https.key',
   cert: './https.crt',
