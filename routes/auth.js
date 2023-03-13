@@ -30,24 +30,27 @@ router.post('/sign-up', (req, res) => {
   }
 })
 
-router.post('/sign-in', (req, res) => {
+router.post('/sign-in', async (req, res) => {
   try {
-    User.findOne({email: req.body.email})
-      .then(user => {
-        bcrypt.compare(req.body.password, user.password, (err, match) => {
-          // This is an async callback fn, so if I throw an error here it won't be caught by the try-catch
-          if (!match) {
-            const error = new Error('Wrong credentials')
-            res.clearCookie('user')
-            console.error(error)
-            res.send({error: error.message})
-            return
-          }
-          req.token = encryptUserData(user)
-          res.cookie('user', req.token)
-          res.send({user: req.token})
-        })
-      })
+    const user = await User.findOne({email: req.body.email})
+    if (!user)
+      throw new Error('Could not find user')
+    bcrypt.compare(req.body.password, user.password, (err, match) => {
+      // This is an async callback fn, so if I throw an error here it won't be caught by the try-catch
+      try {
+        if (err)
+          throw err
+        if (!match)
+          throw new Error('Wrong credentials')
+        req.token = encryptUserData(user)
+        res.cookie('user', req.token)
+        res.send({user: req.token})
+      } catch (error) {
+        res.clearCookie('user')
+        console.error(error)
+        res.send({error: error.message})
+      }
+    })
   } catch (error) {
     console.error(error)
     res.send({error: error.message})

@@ -1,21 +1,26 @@
-<h3>Mongoose schema</h3>
-<pre><code class="language-javascript">
+<h3>Response</h3>
+<p><em>Every request in this section returns this: </em></p>
+<pre><code class="language-json">
 {
-  users: {
-    user1: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'users',
-      required: true,
-    },
-    user2: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'users',
-      required: true
-    }
-  },
-  messages: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'messages'
-  }]
+	"users": {
+		"user1": "64012c17ee606bf7649fad84",
+		"user2": "640e30b8118d0b9a9047ecf9"
+	},
+	"_id": "640f9e7e749557c0f9f7b985",
+	"messages": [],
+	"__v": 0
 }
 </code></pre>
+
+<h3><strong>GET</strong> <code>/api/conversations/{id}</code></h3>
+<p>Returns the specified message if it has access to it</p>
+
+<h3><strong>GET</strong> <code>/api/conversations/</code></h3>
+<p>Returns an array with all the messages from a conversation this user has access to</p>
+
+<h3><strong>POST</strong> <code>/api/conversations/</code></h3>
+<p>Sends a new message</p>
+<h4>Request body</h4>
+<ul>
+  <li><strong>recipient</strong>: ID of the other user who'll be a member of this conversation</li>
+</ul>

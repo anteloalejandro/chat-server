@@ -52,6 +52,7 @@ router.post('/', async (req, res) => {
       user1: user._id,
       user2: recipient._id
     }
+    console.log(users)
 
     if (await Conversation.findOne({
       "users.user1": users.user1,
@@ -59,7 +60,7 @@ router.post('/', async (req, res) => {
     }))
       throw new Error('These users already have a conversation')
 
-    const conversation = new Conversation(users)
+    const conversation = new Conversation({users: users})
     conversation.save().then(() => {
       user.conversations.push(conversation._id)
       user.save()

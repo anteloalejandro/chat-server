@@ -1,23 +1,26 @@
-<h3>Mongoose schema</h3>
-<pre><code class="language-javascript">
+<h3>Response</h3>
+<p><em>Every request in this section returns this: </em></p>
+<pre><code class="language-json">
 {
-  content: {
-    type: String,
-    required: true
-  },
-  date: {
-    type: Date,
-    default: new Date(Date.now()),
-  },
-  author: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'users',
-    required: true
-  },
-  conversation: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'conversations',
-    required: true
-  }
+	"_id": "64090df9e0408659f3185eda",
+	"content": "hello world",
+	"date": "2023-03-08T22:36:29.834Z",
+	"author": "64012c17ee606bf7649fad84",
+	"conversation": "64090daecbd947e2e4895cf6",
+	"__v": 0
 }
 </code></pre>
+
+<h3><strong>GET</strong> <code>/api/messages/{id}</code></h3>
+<p>Returns the specified message if it has access to it</p>
+
+<h3><strong>GET</strong> <code>/api/messages/conversation/{id}</code></h3>
+<p>Returns an array with all the messages from a conversation this user has access to</p>
+
+<h3><strong>POST</strong> <code>/api/messages/</code></h3>
+<p>Sends a new message</p>
+<h4>Request body</h4>
+<ul>
+  <li><strong>conversation</strong>: ID of the conversation</li>
+  <li><strong>content</strong>: The body of the message</li>
+</ul>
