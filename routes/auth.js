@@ -43,7 +43,7 @@ router.post('/sign-in', async (req, res) => {
         if (!match)
           throw new Error('Wrong credentials')
         req.token = encryptUserData(user)
-        res.send({user: req.token})
+        res.send({token: req.token})
       } catch (error) {
         console.error(error)
         res.send({error: error.message})

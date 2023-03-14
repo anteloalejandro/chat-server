@@ -1,5 +1,10 @@
 import { io } from "https://cdn.socket.io/4.3.2/socket.io.esm.min.js";
 const headers = { "Content-type": "application/json; charset=UTF-8" }
+let token = localStorage.getItem('token')
+
+function tokenToParam() {
+  return '/?token='+token
+}
 
 function addMessage(str, element, owner = true) {
   const child = document.createElement('p')
@@ -17,19 +22,19 @@ export async function run() {
   const input = form.querySelector('input')
   const info = document.getElementById('info')
 
-  const user = await fetch('/api/users/')
+  const user = await fetch('/api/users'+tokenToParam())
     .then(response => response.json())
   if (user.error) {
     info.textContent = 'Not logged in'
     return
   } else {
-    fetch('/api/conversations/'+conversation)
+    fetch('/api/conversations/'+conversation+tokenToParam())
       .then(response => response.json())
       .then(conversation => {
         const user1 = conversation.users.user1
         const user2 = conversation.users.user2
         const recieverId = user1 == user._id ? user2 : user1
-        fetch('/api/users/'+recieverId)
+        fetch('/api/users/'+recieverId+tokenToParam())
           .then(response => response.json())
           .then(reciever => {
             info.textContent = `Sender: ${user.username}, Reciever: ${reciever.username}`
@@ -44,7 +49,7 @@ export async function run() {
       .scrollIntoView({behavior: "smooth"})
   })
 
-  fetch('/api/messages/conversation/'+conversation)
+  fetch('/api/messages/conversation/'+conversation+tokenToParam())
     .then(response => response.json())
     .then(message => {
       message.forEach(m =>
@@ -53,7 +58,7 @@ export async function run() {
 
   form.onsubmit = ev => {
     ev.preventDefault()
-    fetch('/api/messages', {
+    fetch('/api/messages'+tokenToParam(), {
       method: 'POST',
       body: JSON.stringify({
         "content": input.value,

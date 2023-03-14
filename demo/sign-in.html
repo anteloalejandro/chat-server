@@ -73,6 +73,8 @@
       }),
       headers: headers = { "Content-type": "application/json; charset=UTF-8" }
     })
-      .then(() => {location.href = '/'})
+      .then(response => response.json())
+      .then(json => localStorage.setItem('token', json.token))
+      .catch(err => console.error(err))
   })
 </script>

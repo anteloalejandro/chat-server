@@ -19,7 +19,7 @@
       <nav>
         <span id="info"></span>
         <a href="#" style="float: right"
-          onclick="document.cookie = 'user=;'; location.reload()">
+          onclick="localStorage.removeItem('token'); location.reload()">
           Sign out
         </a>
         <a href="sign-in.html" style="float: right">Sign in</a>
