@@ -1,8 +1,26 @@
+:root {
+  --header-height: 4rem;
+  scroll-padding-top: var(--header-height);
+}
+
 main {
+  margin-top: var(--header-height);
   padding-block: 0.5rem;
 }
 
 header li a,
 section h2 {
   text-transform: capitalize;
+}
+
+#to-top {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  opacity: 0.2;
+  transition: opacity 200ms ease;
+}
+
+#to-top:is(:focus, :hover) {
+  opacity: 1;
 }

@@ -17,10 +17,10 @@
     <link href="/public/css/docs.css" rel="stylesheet">
   </head>
   <body class="bg-body text-body" data-bs-theme="dark">
-    <header class="bg-dark-subtle">
-      <nav class="navbar navbar-expand-sm ">
+    <header class="bg-dark-subtle fixed-top">
+      <nav class="navbar navbar-expand-sm">
         <div class="container-fluid">
-          <a class="navbar-brand" href="/"><h3 class="mb-0">Docs</h3></a>
+          <a class="navbar-brand" href="/api/docs"><h3 class="mb-0">Docs</h3></a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -41,5 +41,16 @@
     </div>
     <footer class="bg-dark-subtle">
     </footer>
+    <a href="#" id="to-top" class="btn btn-secondary border-light rounded-1">↑</a>
   </body>
 </html>
+
+<script>
+  const navLinks = document.querySelectorAll('.nav-link')
+  const nav = document.getElementById('navbarNav')
+  const bsCollapse = new bootstrap.Collapse(nav)
+  bsCollapse.toggle()
+  navLinks.forEach(l => {
+    l.addEventListener('click', () => { bsCollapse.toggle() })
+  })
+</script>

@@ -5,6 +5,9 @@ import { router as conversationsRouter } from './conversations.js'
 import { router as usersRouter } from './users.js'
 export const router = Router()
 
+router.get('/', (req, res) => {
+  res.redirect('docs')
+})
 router.use('/docs', docsRouter)
 router.use('/messages', messagesRouter)
 router.use('/conversations', conversationsRouter)
