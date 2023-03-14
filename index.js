@@ -49,7 +49,7 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(cookieParser())
 app.use((req, res, next) => {
-  req.token = req.cookies.user
+  req.token = req.query.token
   next()
 })
 app.use(cors(corsConfig))

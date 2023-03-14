@@ -43,10 +43,8 @@ router.post('/sign-in', async (req, res) => {
         if (!match)
           throw new Error('Wrong credentials')
         req.token = encryptUserData(user)
-        res.cookie('user', req.token)
         res.send({user: req.token})
       } catch (error) {
-        res.clearCookie('user')
         console.error(error)
         res.send({error: error.message})
       }
@@ -55,9 +53,4 @@ router.post('/sign-in', async (req, res) => {
     console.error(error)
     res.send({error: error.message})
   }
-})
-
-router.get('/sign-out', (req, res) => {
-  res.clearCookie('user')
-  res.redirect('/')
 })
