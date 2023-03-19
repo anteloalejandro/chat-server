@@ -23,6 +23,29 @@ router.get('/', async (req, res) => {
   }
 })
 
+router.get('/contacts', async (req, res) => {
+  try {
+    const user = await decryptUserData(req.token)
+    if (!user)
+      throw new Error('Could not find user')
+
+    const conversations = await Conversation.find({_id: {$in: user.conversations}})
+
+    const contactIds = conversations.map(c => {
+      return c.users.user1 == user.id ?
+        c.users.user2 :
+        c.users.user1
+    })
+
+    const contacts = await User.find({_id: {$in: contactIds}})
+
+    res.send(contacts)
+  } catch (error) {
+    console.error(error)
+    res.send({error: error.message})
+  }
+})
+
 router.get('/:id', async (req, res) => {
   try {
     const user = await User.findById(req.params.id)
