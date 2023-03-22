@@ -55,6 +55,8 @@ router.post('/', async (req, res) => {
       throw new Error('Could not find this conversation')
     if (!user.conversations.includes(conversation._id))
       throw new Error('This user is not a member of this conversation')
+    if (!req.body.content)
+      throw new Error("The message needs to have content")
 
     console.log('OK')
     const message = new Message({
