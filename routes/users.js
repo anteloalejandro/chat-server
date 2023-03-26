@@ -23,6 +23,43 @@ router.get('/', async (req, res) => {
   }
 })
 
+router.get('/byEmail/:email', async (req, res) => {
+  try {
+    const user = await User.findOne({email: req.params.email})
+    if (!user)
+      throw new Error('This user does not exist')
+
+    user.password = null
+
+    res.send(user)
+  } catch (error) {
+    console.error(error)
+    res.send({error: error.message})
+  }
+})
+
+router.get('/search', async (req, res) => {
+  try {
+
+    if (!req.query.email) {
+      res.send([])
+      return
+    }
+
+    const users = await User.find({email: {
+      $regex: req.query.email.toLowerCase()
+    }})
+    if (!users || users.length == 0)
+      throw new Error('Could not find any users matching that email')
+
+    users.forEach(u => {u.password = null})
+    res.send(users)
+  } catch (error) {
+    console.error(error)
+    res.send({error: error.message})
+  }
+})
+
 router.get('/contacts', async (req, res) => {
   try {
     const user = await decryptUserData(req.token)
