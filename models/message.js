@@ -7,7 +7,7 @@ const messageSchema = new mongoose.Schema({
   },
   date: {
     type: Date,
-    default: new Date(Date.now()),
+    default: () => new Date(Date.now()),
   },
   author: {
     type: mongoose.Schema.Types.ObjectId,
