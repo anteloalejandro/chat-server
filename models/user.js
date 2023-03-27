@@ -24,7 +24,15 @@ const userSchema = new mongoose.Schema({
   conversations: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'conversations'
-  }]
+  }],
+  profilePicture: {
+    type: String,
+    trim: true
+  },
+  backgroundImg: {
+    type: String,
+    trim: true
+  }
 })
 
 export const User = mongoose.model('users', userSchema)

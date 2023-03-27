@@ -18,6 +18,11 @@ const messageSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'conversations',
     required: true
+  },
+  status: {
+    type: String,
+    default: 'sent',
+    trim: true
   }
 })
 
