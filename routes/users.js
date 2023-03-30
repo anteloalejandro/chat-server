@@ -41,10 +41,8 @@ router.get('/byEmail/:email', async (req, res) => {
 router.get('/search', async (req, res) => {
   try {
 
-    if (!req.query.email) {
-      res.send([])
-      return
-    }
+    if (!req.query.email)
+      throw new Error('Email not provided')
 
     const users = await User.find({email: {
       $regex: req.query.email.toLowerCase()
@@ -56,7 +54,7 @@ router.get('/search', async (req, res) => {
     res.send(users)
   } catch (error) {
     console.error(error)
-    res.send({error: error.message})
+    res.send([])
   }
 })
 
