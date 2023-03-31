@@ -49,7 +49,7 @@ router.get('/:id', async (req, res) => {
     if (!user.conversations.includes(message.conversation))
       throw new Error('This user does not have access to this message')
 
-    if (message.status != 'recieved' && message.author != user._id) {
+    if (message.status != 'deleted' && message.author != user._id) {
       message.status = 'recieved'
       message.save()
     }
@@ -85,6 +85,31 @@ router.post('/', async (req, res) => {
       conversation.messages.push(message._id)
       conversation.save()
     }).then(() => {res.send(message)})
+  } catch (error) {
+    console.error(error)
+    res.send({error: error.message})
+  }
+})
+
+router.delete('/:id', async (req, res) => {
+  try {
+    const user = await decryptUserData(req.token)
+    if (!user)
+      throw new Error('Could not authenticate user')
+
+    const message = await Message.findById(req.params.id)
+
+    const conversation = await Conversation.findById(message.conversation)
+    if (!conversation)
+      throw new Error('Could not find this conversation')
+    if (!user.conversations.includes(conversation._id))
+      throw new Error('This user is not a member of this conversation')
+
+    message.status = 'deleted'
+    message.content = 'deleted'
+    message.save()
+
+    res.send(message)
   } catch (error) {
     console.error(error)
     res.send({error: error.message})
