@@ -74,6 +74,33 @@ router.post('/', async (req, res) => {
   }
 })
 
+router.put('/:id', async (req, res) => {
+  try {
+    const user = await decryptUserData(req.token)
+    if (!user)
+      throw new Error('Could not authenticate user')
+
+    const conversation = await Conversation.findById(req.params.id)
+    if (!conversation)
+      throw new Error('Could not find conversation')
+    if (!user.conversations.includes(conversation._id))
+      throw new Error('This user is not a member of this conversation')
+
+    Object.keys(Conversation.schema.obj).forEach(k => {
+      if (!['backgroundImg', 'backgroundColor'].includes(k))
+        return
+
+      conversation[k] = req.body[k]
+    })
+
+    conversation.save()
+    res.send(conversation)
+  } catch (error) {
+    console.error(error)
+    res.send({error: error.message})
+  }
+})
+
 router.delete('/:id', async (req, res) => {
   try {
     const user = await decryptUserData(req.token)
@@ -104,10 +131,6 @@ router.delete('/:id', async (req, res) => {
         user2.save().then(console.log)
         res.send(conversation)
       })
-    // console.log('---DELETE---')
-    // console.log(conversation.messages)
-    // console.log({user1Conv: user.conversations, user2Conv: user2.conversations})
-    // res.send(conversation)
   } catch (error) {
     console.error(error)
     res.send({error: error.message})
