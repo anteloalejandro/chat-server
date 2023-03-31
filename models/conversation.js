@@ -20,7 +20,7 @@ const conversationSchema = new mongoose.Schema({
   backgroundImg: {
     type: String,
     trim: true,
-    pattern: '*\.(png|jpg|jpeg|webp)$'
+    pattern: '*.\.(png|jpg|jpeg|webp)$'
   },
   backgroundColor: {
     type: String,

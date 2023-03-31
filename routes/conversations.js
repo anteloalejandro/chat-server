@@ -90,7 +90,8 @@ router.put('/:id', async (req, res) => {
       if (!['backgroundImg', 'backgroundColor'].includes(k))
         return
 
-      conversation[k] = req.body[k]
+      if (req.body[k] !== undefined)
+        conversation[k] = req.body[k]
     })
 
     conversation.save()
@@ -127,8 +128,8 @@ router.delete('/:id', async (req, res) => {
 
     conversation.deleteOne()
       .then(() => {
-        user.save().then(console.log)
-        user2.save().then(console.log)
+        user.save()
+        user2.save()
         res.send(conversation)
       })
   } catch (error) {

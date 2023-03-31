@@ -27,7 +27,8 @@ const userSchema = new mongoose.Schema({
   }],
   profilePicture: {
     type: String,
-    trim: true
+    trim: true,
+    // pattern: '([^\\s]+(\\.(?i)(jpe?g|png|gif|bmp))$)'
   }
 })
 

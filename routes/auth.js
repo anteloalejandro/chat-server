@@ -54,3 +54,31 @@ router.post('/sign-in', async (req, res) => {
     res.send({error: error.message})
   }
 })
+
+router.put('/change-password', async (req, res) => {
+  try {
+    const saltRounds = 10
+    if (!req.query.token)
+      throw new Error('You must sign-in first')
+
+    const user = await decryptUserData(req.query.token)
+    if (!user)
+      throw new Error('Could not authenticate user')
+
+    bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
+      if (err)
+        throw err
+
+      console.log('Changing password: ', {before: user.password, after: hash})
+      User.updateOne({_id: user._id}, {$set: {password: hash}})
+        .then(() => res.send({
+          msg: 'Password successfully changed. You\'ll need to sign-in again',
+          id: user._id
+        }))
+    })
+  } catch (error) {
+    console.error(error)
+    res.send({error: error.message})
+  }
+
+})

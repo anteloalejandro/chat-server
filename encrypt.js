@@ -32,7 +32,7 @@ export function encryptUserData (user) {
 export function decryptUserData (encryptedUser) {
   let email, password
   try {
-    [email, password] = decrypt(encryptedUser).split(':')
+[email, password] = decrypt(encryptedUser).split(':')
   } catch (error) {
     console.error(error);
   }
