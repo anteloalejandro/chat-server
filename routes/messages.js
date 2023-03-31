@@ -11,13 +11,25 @@ router.get('/conversation/:id', async (req, res) => {
     if (!user)
       throw new Error('Could not authenticate user')
 
-    const conversation = await Conversation.findById(req.params.id).populate('messages')
+    const conversation = await Conversation.findById(req.params.id)
     if (!conversation)
       throw new Error('Could not find this conversation')
     if (!user.conversations.includes(conversation._id))
       throw new Error('This user is not a member of this conversation')
 
-    res.send(conversation.messages)
+    Message.updateMany(
+      {
+        conversation: conversation._id,
+        author: {$ne: user._id},
+        status: {$not: /^deleted$/}
+      },
+      { $set: {"status": "recieved"} },
+      // false,
+      // true
+    ).then(async () => {
+      const messages = (await conversation.populate('messages')).messages
+      res.send(messages)
+    })
   } catch (error) {
     console.error(error)
     res.send({error: error.message})
@@ -36,6 +48,11 @@ router.get('/:id', async (req, res) => {
 
     if (!user.conversations.includes(message.conversation))
       throw new Error('This user does not have access to this message')
+
+    if (message.status != 'recieved' && message.author != user._id) {
+      message.status = 'recieved'
+      message.save()
+    }
 
     res.send(message)
   } catch (error) {

@@ -28,10 +28,6 @@ const userSchema = new mongoose.Schema({
   profilePicture: {
     type: String,
     trim: true
-  },
-  backgroundImg: {
-    type: String,
-    trim: true
   }
 })
 

@@ -17,11 +17,15 @@ const conversationSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'messages'
   }],
-  backgroundImg: [{
+  backgroundImg: {
     type: String,
     trim: true,
     pattern: '*\.(png|jpg|jpeg|webp)$'
-  }]
+  },
+  backgroundColor: {
+    type: String,
+    trim: true
+  }
 })
 
 export const Conversation = mongoose.model('conversations', conversationSchema)
