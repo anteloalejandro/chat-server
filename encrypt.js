@@ -1,5 +1,7 @@
 import crypto from 'crypto'
+import bcrypt from 'bcrypt'
 import { User } from './models/user.js'
+import { log } from 'console'
 
 const algorithm = 'aes256'
 const secret = 'O4eZyDmkAy'
@@ -32,11 +34,15 @@ export function encryptUserData (user) {
 export function decryptUserData (encryptedUser) {
   let email, password
   try {
-[email, password] = decrypt(encryptedUser).split(':')
+    [email, password] = decrypt(encryptedUser).split(':')
   } catch (error) {
     console.error(error);
   }
 
   const userPromise = User.findOne({email: email})
+    .then(user => {
+      if (password === user.password)
+        return user
+    })
   return userPromise
 }

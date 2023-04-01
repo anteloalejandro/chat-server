@@ -23,6 +23,10 @@ router.post('/sign-up', (req, res) => {
           id: user._id
         })
       })
+      .catch(error => {
+        console.error('Error inside hash function:\n'+error)
+        res.send({error: error.message})
+      })
     })
   } catch (error) {
     console.error(error)
@@ -65,17 +69,23 @@ router.put('/change-password', async (req, res) => {
     if (!user)
       throw new Error('Could not authenticate user')
 
-    bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
-      if (err)
-        throw err
-
-      console.log('Changing password: ', {before: user.password, after: hash})
-      User.updateOne({_id: user._id}, {$set: {password: hash}})
-        .then(() => res.send({
-          msg: 'Password successfully changed. You\'ll need to sign-in again',
-          id: user._id
-        }))
-    })
+    // bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
+    //   if (err)
+    //     throw err
+    //
+    //   console.log('Changing password: ', {before: user.password, after: hash})
+    //   User.updateOne({_id: user._id}, {$set: {password: hash}})
+    //     .then(() => res.send({
+    //       msg: 'Password successfully changed. You\'ll need to sign-in again',
+    //       id: user._id
+    //     }))
+    // })
+    const hash = bcrypt.hashSync(req.body.password, saltRounds)
+    User.updateOne({_id: user._id}, {$set: {password: hash}})
+      .then(() => res.send({
+        msg: 'Password successfully changed. You\'ll need to sign-in again',
+        id: user._id
+      }))
   } catch (error) {
     console.error(error)
     res.send({error: error.message})
