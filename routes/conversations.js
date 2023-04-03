@@ -7,11 +7,14 @@ export const router = Router()
 
 router.get('/', async (req, res) => {
   try {
-    const user = await decryptUserData(req.token).populate('conversations')
+    const user = await decryptUserData(req.token)
     if (!user)
       throw new Error('Could not authenticate user')
 
-    res.send(user.conversations)
+    user.populate('conversations')
+      .then(u => {
+        res.send(u.conversations)
+      })
   } catch (error) {
     console.error(error)
     res.send({error: error.message})
