@@ -2,7 +2,6 @@ import express, { Router } from 'express'
 import http from 'http'
 import https from 'https'
 import bodyParser from 'body-parser'
-import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import mongoose from 'mongoose'
 import fs from 'fs'
@@ -47,7 +46,6 @@ app.set('view engine', 'hbs')
 app.set('views', 'docs')
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
-app.use(cookieParser())
 app.use('/api', (req, res, next) => {
   req.token = req.query.token
   next()
