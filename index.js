@@ -12,6 +12,7 @@ import { router as apiRoute } from './routes/api.js'
 import { User } from './models/user.js'
 import { Message } from './models/message.js'
 import { Conversation } from './models/conversation.js'
+import { encryptUserData } from './encrypt.js'
 const app = express()
 
 hbs.registerPartials('./docs/partials');
@@ -81,8 +82,10 @@ io.on('connection', (socket) => {
       const conversation = await Conversation.findById(msg.conversation)
       if (!conversation)
         throw new Error('Could not find this conversation')
-      Object.keys(conversation.users).forEach(u => {
-        const room = conversation.users[u]._id.toString()
+      Object.keys(conversation.users).forEach(async u => {
+        const userId = conversation.users[u]._id.toString()
+        const user = await User.findById(userId);
+        const room = encryptUserData(user)
         console.log('sending message to room '+room)
         io.in(room).emit('refresh-messages', msg)
       })
