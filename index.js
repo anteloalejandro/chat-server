@@ -93,6 +93,23 @@ io.on('connection', (socket) => {
       console.error(error)
     }
   })
+
+  socket.on('read', async msg => {
+    console.log('read message ', msg._id)
+    try {
+      const conversation = await Conversation.findById(msg.conversation)
+      if (!conversation)
+        throw new Error('Could not find this conversation')
+      const message = await Message.findById(msg._id)
+      const user = await User.findById(msg.author)
+      if (!user)
+        throw new Error('Could not find user')
+      const room = encryptUserData(user)
+      io.in(room).emit('refresh-read', msg)
+    } catch (error) {
+      console.error(error)
+    }
+  })
 })
 
 server.listen(settings.port, () => {
