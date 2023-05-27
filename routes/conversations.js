@@ -21,6 +21,32 @@ router.get('/', async (req, res) => {
   }
 })
 
+router.get('/unread', async (req, res) => {
+  try {
+    const user = await decryptUserData(req.token)
+    if (!user)
+      throw new Error('Could not authenticate user')
+
+    /**@type Conversation[]*/
+    const conversations = (await user.populate('conversations')).conversations
+
+    /**@type Conversation[]*/
+    const unreadConvs = []
+
+    for (const conversation of conversations) {
+      /**@type Message[]*/
+      const messages = (await conversation.populate('messages')).messages
+      if (messages.filter(m => m.status == 'sent' && m.author.toString() != user._id.toString()).length > 0)
+        unreadConvs.push(conversation)
+    }
+
+    res.send(unreadConvs)
+  } catch (error) {
+    console.error(error)
+    res.send({error: error.message})
+  }
+})
+
 router.get('/:id', async (req, res) => {
   try {
     const user = await decryptUserData(req.token)

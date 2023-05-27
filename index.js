@@ -77,7 +77,6 @@ io.on('connection', (socket) => {
   })
 
   socket.on('message', async msg => {
-    console.log('message: ', msg)
     try {
       const conversation = await Conversation.findById(msg.conversation)
       if (!conversation)
@@ -95,7 +94,6 @@ io.on('connection', (socket) => {
   })
 
   socket.on('read', async msg => {
-    console.log('read message ', msg._id)
     try {
       const conversation = await Conversation.findById(msg.conversation)
       if (!conversation)
