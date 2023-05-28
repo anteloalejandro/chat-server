@@ -50,6 +50,10 @@ app.set('view engine', 'hbs')
 app.set('views', 'docs')
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
+app.use((req, res, next) => {
+  res.status(404).redirect('/')
+  next()
+})
 app.use('/api', (req, res, next) => {
   req.token = req.query.token
   next()
@@ -107,6 +111,20 @@ io.on('connection', (socket) => {
         throw new Error('Could not find user')
       const room = encryptUserData(user)
       io.in(room).emit('refresh-read', msg)
+    } catch (error) {
+      console.error(error)
+    }
+  })
+
+  socket.on('conversation', async (recipientId) => {
+    try {
+      const user = await User.findById(recipientId)
+      if (!user)
+        throw new Error('could not find this user')
+
+      const room = encryptUserData(user)
+      console.log('new conv')
+      io.in(room).emit('refresh-conversations')
     } catch (error) {
       console.error(error)
     }

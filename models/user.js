@@ -35,6 +35,9 @@ const userSchema = new mongoose.Schema({
     trim: true,
     validate: {
       validator: function(v) {
+        if ([undefined, null, ''].includes(v))
+          return true
+
         return /\.(jpe?g|png|gif|bmp)$/.test(v)
       },
       message: m => m.value + 'not a valid image format'
