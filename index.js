@@ -59,7 +59,10 @@ app.use('/', express.static(settings.root))
 app.use('/public', express.static('public'))
 app.use('/auth', authRoute)
 app.use('/api', apiRoute)
-
+app.use((req, res, next) => {
+  res.redirect('/')
+  next()
+})
 const key = fs.readFileSync(settings.key)
 const certificate = fs.readFileSync(settings.cert)
 const credentials = {key: key, cert: certificate}
