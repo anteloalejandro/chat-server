@@ -5,7 +5,12 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     trim: true,
-    pattern: '/^\S+@\S+\.\S+$/'
+    validate: {
+      validator: function(v) {
+        return /^\S+@\S+\.\S+$/.test(v)
+      },
+      message: m => m.value + 'is not a valid email'
+    },
   },
   username: {
     type: String,
@@ -28,7 +33,12 @@ const userSchema = new mongoose.Schema({
   profilePicture: {
     type: String,
     trim: true,
-    // pattern: '([^\\s]+(\\.(?i)(jpe?g|png|gif|bmp))$)'
+    validate: {
+      validator: function(v) {
+        return /\.(jpe?g|png|gif|bmp)$/.test(v)
+      },
+      message: m => m.value + 'not a valid image format'
+    }
   }
 })
 
