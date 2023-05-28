@@ -5,3 +5,4 @@ settings.json
 *.cert
 !snake-oil.crt
 !snake-oil.key
+public/img/uploads/**

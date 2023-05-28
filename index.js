@@ -13,6 +13,9 @@ import { User } from './models/user.js'
 import { Message } from './models/message.js'
 import { Conversation } from './models/conversation.js'
 import { encryptUserData } from './encrypt.js'
+process.on('uncaughtException', err => {
+  console.log({uncaughtException: err})
+})
 const app = express()
 
 hbs.registerPartials('./docs/partials');
