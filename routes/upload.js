@@ -3,6 +3,7 @@ import  fs from 'fs'
 import multer from 'multer'
 import path from 'path'
 import { fileURLToPath } from 'url'
+import { decryptUserData } from '../encrypt.js'
 
 export const router = Router()
 
