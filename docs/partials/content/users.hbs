@@ -1,5 +1,5 @@
 <h3>Response</h3>
-<p><em>Every request in this section returns this: </em></p>
+<p><em>Every request in this section returns this object (by itself or in an array): </em></p>
 <pre><code class="language-json">
 {
 	"_id": "64012c17ee606bf7649fad84",
@@ -15,19 +15,16 @@
 }
 </code></pre>
 <p>
-	`profilePicture` could be undefined.
+	"profilePicture" can be undefined.
 </p>
 
-<h3><strong>GET</strong> <code>/api/users/</code></h3>
+<h3><strong>GET</strong> <code>/api/users/</code> 🔒</h3>
 <p>Returns the current authenticated user, without its password</p>
 
 <h3><strong>GET</strong> <code>/api/users/{id}</code></h3>
 <p>Returns a user with a matching <code>id</code>, without its password</p>
 
-<h3><strong>DELETE</strong> <code>/api/users/</code></h3>
-<p>Deletes the authenticated user</p>
-
-<h3><strong>GET</strong> <code>/api/users/contacts/</code></h3>
+<h3><strong>GET</strong> <code>/api/users/contacts/</code> 🔒</h3>
 <p>Returns a list of all the users the user has a conversation with</p>
 
 <h3><strong>GET</strong> <code>/api/users/byEmail/{email}</code></h3>
@@ -35,3 +32,16 @@
 
 <h3><strong>GET</strong> <code>/api/users/search/?email={email}</code></h3>
 <p>Returns a list of users with a matching <code>email</code>, without their passwords</p>
+
+<h3><strong>PUT</strong> <code>/api/users/</code> 🔒</h3>
+<p>Updates the authenticated user's info (not including its password)</p>
+<h4>Request body</h4>
+<ul>
+	<li><strong>username (optional)</strong></li>
+	<li><strong>email (optional)</strong></li>
+	<li><strong>profilePicture (optional)</strong></li>
+</ul>
+
+<h3><strong>DELETE</strong> <code>/api/users/</code> 🔒</h3>
+<p>Deletes the authenticated user</p>
+

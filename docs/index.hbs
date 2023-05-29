@@ -1,10 +1,22 @@
 {{#> template}}
-<h1>Overview</h1>
+<h1 id="overview">Overview</h1>
 
-<p>This public REST API allows developers to create their own frontend messaging app.</p>
-<p>Responses from this API will be in JSON format.</p>
+<p>This public REST API allows developers to create their own frontend instant messaging app.</p>
 
-<p>At the moment, there are essentially 3 types of successful responses: Users, Conversations and Messages.</p>
+<p>You can check out the all the code that makes this possible on <a href="https://github.com/anteloalejandro/chat-server">GitHub</a>, and you are welcome to download, edit, distribute and fork this code however you want.</p>
+
+<p>If you need an example implementation of a messaging app using this API, visit the <a href="https://github.com/anteloalejandro/chat-app">GitHub repo</a> of <a href="/">this app</a>.</p>
+
+<h1 id="api">API Requests</h1>
+
+<p>Responses from this API are all in JSON format.</p>
+
+<p>This responses are categorized in 3 main object types: Users, Conversations and Messages, plus a set of different responses related to user authentication and other related to uploading files.</p>
+
+<p>Most requests require a Query Parameter on the URL called 'token', which is used to identify a user. These requests will be marked with a 🔒. This token is obtained when signing in as an already existing user (see the Auth responses for more info.)</p>
+
+<p>If a request fails, instead of the response shown bellow, it will return an object with an "error" attribute detailing what happened.</p>
+
 {{#each pages as |page|}}
 {{#> section id=page heading=page }}
   {{> (concat 'content/' page) }}
@@ -12,3 +24,53 @@
 {{/each}}
 
 {{/ template}}
+
+<h1 id="socketio">SocketIO Events</h1>
+
+<p>In order to help with responsiveness, this server also provides developers with a set of SocketIO events.</p>
+
+<p>These allow clients to comunicate inform each other when they send a message, start a new conversation, etc., removing the need to reload each time either of them want to see if something new has happened.</p>
+
+<hr>
+
+<h2>join</h2>
+<p>Joins a room. Requiered to recieve the events that sends the server.</p>
+<h4>Parameters</h4>
+<ul>
+  <li><strong>room</strong>: Must be a token in order for the rest of the events to work properly</li>
+</ul>
+
+<hr>
+
+<h2>message</h2>
+<p>Emits an event with a message to both users in a conversation. The message must exist first.</p>
+<h5>Parameters</h5>
+<ul>
+  <li><strong>msg</strong>: A message, as seen <a href="#messages">here</a></li>
+</ul>
+<h5>Emitted event</h5>
+<strong>refresh-messages</strong>: Returns the message back to both users.
+
+<hr>
+
+<h2>read</h2>
+<p>Use to signal another user that this user has read the message. The message must exist first.</p>
+<h5>Parameters</h5>
+<ul>
+  <li><strong>msg</strong>: A message, as seen <a href="#messages">here</a></li>
+</ul>
+<h5>Emitted event</h5>
+<strong>refresh-read</strong>: Returns the message back to both users.
+
+<hr>
+
+<h2>conversation</h2>
+<p>Use to signal another user that this user has started a new conversation. The conversation must exist first.</p>
+<h5>Parameters</h5>
+<ul>
+  <li><strong>recipientId</strong>: The ID of the user to send the event to.</li>
+</ul>
+<h5>Emitted event</h5>
+<strong>refresh-conversation</strong>: Returns the conversation back to both users.
+
+<hr>

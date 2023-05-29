@@ -1,5 +1,5 @@
 <h3>Response</h3>
-<p><em>Every request in this section returns this: </em></p>
+<p><em>Every request in this section returns this object (by itself or in an array): </em></p>
 <pre><code class="language-json">
 {
 	"_id": "64090df9e0408659f3185eda",
@@ -12,19 +12,22 @@
 }
 </code></pre>
 <p>
-	`status` can be either 'sent', 'recieved' or 'deleted'
+	"status" can be either "sent", "recieved" or "deleted"
 </p>
 
-<h3><strong>GET</strong> <code>/api/messages/{id}</code></h3>
+<h3><strong>GET</strong> <code>/api/messages/{id}</code> 🔒</h3>
 <p>Returns the specified message if it has access to it</p>
 
-<h3><strong>GET</strong> <code>/api/messages/conversation/{id}</code></h3>
+<h3><strong>GET</strong> <code>/api/messages/conversation/{id}</code> 🔒</h3>
 <p>Returns an array with all the messages from a conversation this user has access to</p>
 
-<h3><strong>POST</strong> <code>/api/messages/</code></h3>
+<h3><strong>POST</strong> <code>/api/messages/</code> 🔒</h3>
 <p>Sends a new message</p>
 <h4>Request body</h4>
 <ul>
   <li><strong>conversation</strong>: ID of the conversation</li>
   <li><strong>content</strong>: The body of the message</li>
 </ul>
+
+<h3><strong>DELETE</strong> <code>/api/messages/</code> 🔒</h3>
+<p>Marks a message as deleted, but doesn't delete it from the database</p>

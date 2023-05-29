@@ -1,5 +1,5 @@
 <h3>Response</h3>
-<p><em>Every request in this section returns this: </em></p>
+<p><em>Every request in this section returns this object (by itself or in an array): </em></p>
 <pre><code class="language-json">
 {
 	"users": {
@@ -14,22 +14,33 @@
 }
 </code></pre>
 <p>
-	`backgroundImg` and `backgroundColor` could be undefined.
+	"backgroundImg" and "backgroundColor" can be undefined.
 </p>
 
-<h3><strong>GET</strong> <code>/api/conversations/{id}</code></h3>
-<p>Returns the specified message if it has access to it</p>
-<h4>URL parameters</h4>
-<ul>
-	<li><strong>token</strong>: </li>
-</ul>
+<h3><strong>GET</strong> <code>/api/conversations/{id}</code> 🔒</h3>
+<p>Returns the specified message if the user has access to it</p>
 
-<h3><strong>GET</strong> <code>/api/conversations/</code></h3>
-<p>Returns an array with all the messages from a conversation this user has access to</p>
+<h3><strong>GET</strong> <code>/api/conversations/</code> 🔒</h3>
+<p>Returns an array with all the conversations this user has access to</p>
 
-<h3><strong>POST</strong> <code>/api/conversations/</code></h3>
-<p>Sends a new message</p>
+<h3><strong>GET</strong> <code>/api/conversations/unread</code> 🔒</h3>
+<p>Returns an array with all the conversations with unread messages</p>
+
+<h3><strong>POST</strong> <code>/api/conversations/</code> 🔒</h3>
+<p>Creates a new conversation with a user if one doesn't exist already</p>
 <h4>Request body</h4>
 <ul>
   <li><strong>recipient</strong>: ID of the other user who'll be a member of this conversation</li>
 </ul>
+
+
+<h3><strong>PUT</strong> <code>/api/conversations/{id}</code> 🔒</h3>
+<p>Updates the information of a specific conversation</p>
+<h4>Request body</h4>
+<ul>
+  <li><strong>backgroundImg (optional)</strong></li>
+  <li><strong>backgroundColor (optional)</strong></li>
+</ul>
+
+<h3><strong>DELETE</strong> <code>/api/conversations/{id}</code> 🔒</h3>
+<p>Deletes the specified conversation</p>

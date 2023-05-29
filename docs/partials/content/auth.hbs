@@ -1,3 +1,17 @@
+<h3><strong>POST</strong> <code>/auth/sign-in</code></h3>
+<p>Stores a token as cookie that authenticates the user and returns its value</p>
+<h4>Request body</h4>
+<ul>
+  <li><strong>email</strong>: string</li>
+  <li><strong>password</strong>: string</li>
+</ul>
+<h4>Response</h4>
+<pre><code class="language-json">
+{
+	"token": "0c985d5bc9c711b9ecb54877026ff27bf41996e6"
+}
+</code></pre>
+
 <h3><strong>POST</strong> <code>/auth/sign-up</code></h3>
 <p>Creates a new user and returns its ID and a status message</p>
 <h4>Request body</h4>
@@ -14,16 +28,16 @@
 }
 </code></pre>
 
-<h3><strong>POST</strong> <code>/auth/sign-in</code></h3>
-<p>Stores a token as cookie that authenticates the user and returns its value</p>
+<h3><strong>PUT</strong> <code>/auth/change-password</code> 🔒</h3>
+<p>Changes the user's password</p>
 <h4>Request body</h4>
 <ul>
-  <li><strong>email</strong>: string</li>
-  <li><strong>password</strong>: string</li>
+  <li><strong>password</strong></li>
 </ul>
 <h4>Response</h4>
 <pre><code class="language-json">
 {
-	"token": "0c985d5bc9c711b9ecb54877026ff27bf41996e6"
+	"msg": "Password successfully changed. You'll need to sign-in again",
+	"id": "640e30b8118d0b9a9047ecf9"
 }
 </code></pre>
