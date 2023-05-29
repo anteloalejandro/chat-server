@@ -14,7 +14,7 @@ import { Message } from './models/message.js'
 import { Conversation } from './models/conversation.js'
 import { encryptUserData } from './encrypt.js'
 process.on('uncaughtException', err => {
-  console.log({uncaughtException: err})
+  console.error({uncaughtException: err})
 })
 const app = express()
 
@@ -78,7 +78,6 @@ io.on('connection', (socket) => {
 
   socket.on('join', room => {
     if (!room) return
-    console.log('joining room '+room)
     socket.join(room)
   })
 
@@ -91,7 +90,6 @@ io.on('connection', (socket) => {
         const userId = conversation.users[u]._id.toString()
         const user = await User.findById(userId);
         const room = encryptUserData(user)
-        console.log('sending message to room '+room)
         io.in(room).emit('refresh-messages', msg)
       })
     } catch (error) {
@@ -122,8 +120,8 @@ io.on('connection', (socket) => {
         throw new Error('could not find this user')
 
       const room = encryptUserData(user)
-      console.log('new conv')
-      io.in(room).emit('refresh-conversations')
+      console.log(user)
+      io.in(room).emit('refresh-conversations', user)
     } catch (error) {
       console.error(error)
     }
