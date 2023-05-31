@@ -1,7 +1,5 @@
 import crypto from 'crypto'
-import bcrypt from 'bcrypt'
 import { User } from './models/user.js'
-import { log } from 'console'
 
 const algorithm = 'aes256'
 const secret = 'O4eZyDmkAy'
@@ -14,9 +12,6 @@ function encrypt (text) {
 }
 
 function decrypt (text) {
-  /* const decipher = crypto.createDecipher(algorithm, secret)
-  const decrypted = decipher.update(text, 'utf-8', 'hex') + decipher.final('utf-8') */
-
   const decipher = crypto.createDecipher(algorithm, secret)
   const decrypted = decipher.update(text, 'hex', 'utf8') + decipher.final('utf8')
 
@@ -25,7 +20,7 @@ function decrypt (text) {
 
 export function encryptUserData (user) {
   try {
-    return encrypt(user.email + ':' + user.password)
+    return encrypt(user._id.toString() + ':' + user.password)
   } catch (error) {
     console.error(error);
   }
@@ -39,7 +34,7 @@ export function decryptUserData (encryptedUser) {
     console.error(error);
   }
 
-  const userPromise = User.findOne({email: email})
+  const userPromise = User.findById()
     .then(user => {
       if (password === user.password)
         return user
