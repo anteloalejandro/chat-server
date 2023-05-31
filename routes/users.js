@@ -6,6 +6,7 @@ import {encryptUserData, decryptUserData} from '../encrypt.js'
 import bcrypt from 'bcrypt'
 export const router = Router()
 
+// Returns the User that matches a token
 router.get('/', async (req, res) => {
   try {
     if (!req.token)
@@ -24,6 +25,7 @@ router.get('/', async (req, res) => {
   }
 })
 
+// Returns the User that matches an email exactly
 router.get('/byEmail/:email', async (req, res) => {
   try {
     const user = await User.findOne({email: req.params.email})
@@ -39,6 +41,7 @@ router.get('/byEmail/:email', async (req, res) => {
   }
 })
 
+// Returns a list of Users matching, partially or completelly, an email
 router.get('/search', async (req, res) => {
   try {
 
@@ -59,6 +62,7 @@ router.get('/search', async (req, res) => {
   }
 })
 
+// Returns a list of Users this User has a conversation with
 router.get('/contacts', async (req, res) => {
   try {
     const user = await decryptUserData(req.token)
@@ -82,6 +86,7 @@ router.get('/contacts', async (req, res) => {
   }
 })
 
+// Returns a User
 router.get('/:id', async (req, res) => {
   try {
     const user = await User.findById(req.params.id)
@@ -95,6 +100,7 @@ router.get('/:id', async (req, res) => {
   }
 })
 
+// Updates certain attributes of a User
 router.put('/', async (req, res) => {
   try {
     if (!req.token)
@@ -123,6 +129,7 @@ router.put('/', async (req, res) => {
   }
 })
 
+// Removes a user from the database and related models
 router.delete('/', async (req, res) => {
   try {
     if (!req.token)

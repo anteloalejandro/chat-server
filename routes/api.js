@@ -6,6 +6,7 @@ import { router as usersRouter } from './users.js'
 import { router as uploadRouter } from './upload.js'
 export const router = Router()
 
+// Redirect to appropiate route
 router.get('/', (req, res) => {
   res.redirect('docs')
 })

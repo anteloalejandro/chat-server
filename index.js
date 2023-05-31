@@ -13,17 +13,21 @@ import { User } from './models/user.js'
 import { Message } from './models/message.js'
 import { Conversation } from './models/conversation.js'
 import { encryptUserData } from './encrypt.js'
+
+// Prevent crashes on uncaught errors
 process.on('uncaughtException', err => {
   console.error({uncaughtException: err})
 })
 const app = express()
 
+// HBS function to concatenate arguments
 hbs.registerPartials('./docs/partials');
 hbs.registerHelper('concat', function () {
   const args = [...arguments].slice(0,-1)
   return args.join('')
 })
 
+// Settings file & default settings
 const settings = fs.existsSync('./settings.json') ?
   JSON.parse(fs.readFileSync('./settings.json')) : {}
 const defaults = {
@@ -46,8 +50,10 @@ const corsConfig = {
 mongoose.Promise = global.Promise
 mongoose.connect('mongodb://127.0.0.1:27017/chat')
 
+// Express configuration
 app.set('view engine', 'hbs')
 app.set('views', 'docs')
+// Middlewares
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
 app.use('/api', (req, res, next) => {
@@ -55,14 +61,18 @@ app.use('/api', (req, res, next) => {
   next()
 })
 app.use(cors(corsConfig))
+// Routes
 app.use('/', express.static(settings.root))
 app.use('/public', express.static('public'))
 app.use('/auth', authRoute)
 app.use('/api', apiRoute)
+// Default route
 app.use((req, res, next) => {
   res.redirect('/')
   next()
 })
+
+// HTTPS
 const key = fs.readFileSync(settings.key)
 const certificate = fs.readFileSync(settings.cert)
 const credentials = {key: key, cert: certificate}
@@ -70,6 +80,7 @@ const server = https.createServer(credentials, app)
 
 const io = new Server(server, corsConfig)
 
+// SocketIO events
 io.on('connection', (socket) => {
   console.log('user connected')
   socket.on('disconnect', () => {
@@ -128,6 +139,7 @@ io.on('connection', (socket) => {
   })
 })
 
+// Start HTTP & HTTPS servers
 server.listen(settings.port, () => {
   console.log('Listening on *:'+settings.port)
 })

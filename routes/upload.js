@@ -11,6 +11,7 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const upload = multer({dest: '/tmp'})
 
+// Uploads an Image to a public directory, if the user exists
 router.post('/image', upload.single("image"), async function (req, res) {
   try {
     if (!req.token)

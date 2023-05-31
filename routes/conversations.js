@@ -5,6 +5,7 @@ import { Conversation } from '../models/conversation.js'
 import {encryptUserData, decryptUserData} from '../encrypt.js'
 export const router = Router()
 
+// Returns an array of Conversations
 router.get('/', async (req, res) => {
   try {
     const user = await decryptUserData(req.token)
@@ -21,6 +22,7 @@ router.get('/', async (req, res) => {
   }
 })
 
+// Returns an array of Conversations with unread messages
 router.get('/unread', async (req, res) => {
   try {
     const user = await decryptUserData(req.token)
@@ -47,6 +49,7 @@ router.get('/unread', async (req, res) => {
   }
 })
 
+// Returns a specific Conversation if the user has access to it
 router.get('/:id', async (req, res) => {
   try {
     const user = await decryptUserData(req.token)
@@ -67,6 +70,8 @@ router.get('/:id', async (req, res) => {
   }
 })
 
+// Creates and returns a new Conversation,
+// if none of the participants have a Conversation with each other already
 router.post('/', async (req, res) => {
   try {
     const user = await decryptUserData(req.token)
@@ -103,6 +108,7 @@ router.post('/', async (req, res) => {
   }
 })
 
+// Update a Conversation's information
 router.put('/:id', async (req, res) => {
   try {
     const user = await decryptUserData(req.token)
@@ -131,6 +137,7 @@ router.put('/:id', async (req, res) => {
   }
 })
 
+// Remove a Conversation from the database and related models
 router.delete('/:id', async (req, res) => {
   try {
     const user = await decryptUserData(req.token)

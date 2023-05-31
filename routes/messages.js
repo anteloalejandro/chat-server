@@ -5,6 +5,7 @@ import { Conversation } from '../models/conversation.js'
 import {encryptUserData, decryptUserData} from '../encrypt.js'
 export const router = Router()
 
+// Returns a list of Messages of a specific Conversation
 router.get('/conversation/:id', async (req, res) => {
   try {
     const user = await decryptUserData(req.token)
@@ -36,6 +37,7 @@ router.get('/conversation/:id', async (req, res) => {
   }
 })
 
+// Returns a Message if the user has access to it.
 router.get('/:id', async (req, res) => {
   try {
     const user = await decryptUserData(req.token)
@@ -61,6 +63,7 @@ router.get('/:id', async (req, res) => {
   }
 })
 
+// Creates a new Message
 router.post('/', async (req, res) => {
   try {
     const user = await decryptUserData(req.token)
@@ -91,6 +94,7 @@ router.post('/', async (req, res) => {
   }
 })
 
+// Removes a Message from the database
 router.delete('/:id', async (req, res) => {
   try {
     const user = await decryptUserData(req.token)

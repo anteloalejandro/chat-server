@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt'
 import {encryptUserData, decryptUserData} from '../encrypt.js'
 export const router = Router()
 
+// Sign-in function. Creates and stores a new User, returns its ID
 router.post('/sign-up', (req, res) => {
   const saltRounds = 10;
   try {
@@ -34,6 +35,7 @@ router.post('/sign-up', (req, res) => {
   }
 })
 
+// Returns a token used to identify a User
 router.post('/sign-in', async (req, res) => {
   try {
     const user = await User.findOne({email: req.body.email})
@@ -59,6 +61,7 @@ router.post('/sign-in', async (req, res) => {
   }
 })
 
+// Changes a user's password, returns the user's ID
 router.put('/change-password', async (req, res) => {
   try {
     const saltRounds = 10
@@ -69,17 +72,6 @@ router.put('/change-password', async (req, res) => {
     if (!user)
       throw new Error('Could not authenticate user')
 
-    // bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
-    //   if (err)
-    //     throw err
-    //
-    //   console.log('Changing password: ', {before: user.password, after: hash})
-    //   User.updateOne({_id: user._id}, {$set: {password: hash}})
-    //     .then(() => res.send({
-    //       msg: 'Password successfully changed. You\'ll need to sign-in again',
-    //       id: user._id
-    //     }))
-    // })
     const hash = bcrypt.hashSync(req.body.password, saltRounds)
     User.updateOne({_id: user._id}, {$set: {password: hash}})
       .then(() => res.send({
