@@ -27,14 +27,14 @@ export function encryptUserData (user) {
 }
 
 export function decryptUserData (encryptedUser) {
-  let email, password
+  let id, password
   try {
-    [email, password] = decrypt(encryptedUser).split(':')
+    [id, password] = decrypt(encryptedUser).split(':')
   } catch (error) {
     console.error(error);
   }
 
-  const userPromise = User.findById()
+  const userPromise = User.findById(id)
     .then(user => {
       if (password === user.password)
         return user
