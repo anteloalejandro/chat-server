@@ -23,54 +23,13 @@
 {{/ section}}
 {{/each}}
 
-{{/ template}}
-
 <h1 id="socketio">SocketIO Events</h1>
 
 <p>In order to help with responsiveness, this server also provides developers with a set of SocketIO events.</p>
 
 <p>These allow clients to comunicate inform each other when they send a message, start a new conversation, etc., removing the need to reload each time either of them want to see if something new has happened.</p>
 
-<hr>
+{{> 'content/socketio'}}
 
-<h2>join</h2>
-<p>Joins a room. Requiered to recieve the events that sends the server.</p>
-<h4>Parameters</h4>
-<ul>
-  <li><strong>room</strong>: Must be a token in order for the rest of the events to work properly</li>
-</ul>
+{{/ template}}
 
-<hr>
-
-<h2>message</h2>
-<p>Emits an event with a message to both users in a conversation. The message must exist first.</p>
-<h5>Parameters</h5>
-<ul>
-  <li><strong>msg</strong>: A message, as seen <a href="#messages">here</a></li>
-</ul>
-<h5>Emitted event</h5>
-<strong>refresh-messages</strong>: Returns the message back to both users.
-
-<hr>
-
-<h2>read</h2>
-<p>Use to signal another user that this user has read the message. The message must exist first.</p>
-<h5>Parameters</h5>
-<ul>
-  <li><strong>msg</strong>: A message, as seen <a href="#messages">here</a></li>
-</ul>
-<h5>Emitted event</h5>
-<strong>refresh-read</strong>: Returns the message back to both users.
-
-<hr>
-
-<h2>conversation</h2>
-<p>Use to signal another user that this user has started a new conversation. The conversation must exist first.</p>
-<h5>Parameters</h5>
-<ul>
-  <li><strong>recipientId</strong>: The ID of the user to send the event to.</li>
-</ul>
-<h5>Emitted event</h5>
-<strong>refresh-conversation</strong>: Returns the conversation back to both users.
-
-<hr>
