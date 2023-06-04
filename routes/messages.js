@@ -51,7 +51,7 @@ router.get('/:id', async (req, res) => {
     if (!user.conversations.includes(message.conversation))
       throw new Error('This user does not have access to this message')
 
-    if (message.status != 'deleted' && message.author != user._id) {
+    if (message.status != 'deleted' && message.author.toString() != user._id.toString()) {
       message.status = 'recieved'
       message.save()
     }
