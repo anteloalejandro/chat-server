@@ -145,6 +145,6 @@ server.listen(settings.port, () => {
 })
 http.createServer(
   express().use((req, res) => {
-    res.redirect(300, `https://${req.hostname}:${settings.port}${req.url}`)
+    res.redirect(302, `https://${req.hostname}:${settings.port}${req.url}`)
   })
 ).listen(settings.httpPort)
